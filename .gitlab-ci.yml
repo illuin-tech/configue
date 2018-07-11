@@ -16,7 +16,7 @@ download_deps:
   artifacts:
     paths:
       - "env"
-    expire_in: 1 day
+    expire_in: 1 hour
   tags:
     - docker
 
