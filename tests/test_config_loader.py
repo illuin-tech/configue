@@ -1,13 +1,8 @@
 import logging
 import unittest
 
-from illuin_config.config_loader import ConfigLoader
-
-
-class MyObject:
-    def __init__(self, my_key, my_other_key=None):
-        self.my_key = my_key
-        self.my_other_key = my_other_key
+from illuin_config import ConfigLoader
+from tests.external_module import MyObject
 
 
 class TestConfigLoader(unittest.TestCase):
@@ -40,7 +35,7 @@ class TestConfigLoader(unittest.TestCase):
     def test_load_callable_dict(self):
         config_dict = {
             "my_object": {
-                "()": "test_config_loader.MyObject",
+                "()": "tests.external_module.MyObject",
                 "my_key": "my_value",
                 "my_other_key": 1,
             }
@@ -56,10 +51,10 @@ class TestConfigLoader(unittest.TestCase):
     def test_nested_callable_dict(self):
         config_dict = {
             "my_object": {
-                "()": "test_config_loader.MyObject",
+                "()": "tests.external_module.MyObject",
                 "my_key": "my_value",
                 "my_other_key": {
-                    "()": "test_config_loader.MyObject",
+                    "()": "tests.external_module.MyObject",
                     "my_key": "my_sub_value",
                 },
             }
@@ -85,10 +80,10 @@ class TestConfigLoader(unittest.TestCase):
     def test_internal_variable_loading(self):
         config_dict = {
             "my_object": {
-                "()": "test_config_loader.MyObject",
+                "()": "tests.external_module.MyObject",
                 "my_key": "my_value",
                 "my_other_key": {
-                    "()": "test_config_loader.MyObject",
+                    "()": "tests.external_module.MyObject",
                     "my_key": "my_sub_value",
                 },
             },

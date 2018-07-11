@@ -1,23 +1,19 @@
 import os
 import unittest
 
-from illuin_config import load_config_from_dict, load_config_from_file, load_config_from_json_file, load_config_from_yaml_file
-
-
-class MyObject:
-    def __init__(self, my_key, my_other_key=None):
-        self.my_key = my_key
-        self.my_other_key = my_other_key
+from illuin_config import load_config_from_dict, load_config_from_file, load_config_from_json_file, \
+    load_config_from_yaml_file
+from tests.external_module import MyObject
 
 
 class TestUtils(unittest.TestCase):
     def test_load_config_from_dict(self):
         config_dict = {
             "my_object": {
-                "()": "test_utils.MyObject",
+                "()": "tests.external_module.MyObject",
                 "my_key": "my_value",
                 "my_other_key": {
-                    "()": "test_utils.MyObject",
+                    "()": "tests.external_module.MyObject",
                     "my_key": "my_sub_value",
                 },
             }
