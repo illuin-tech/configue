@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="illuin_logging",
+    name="illuin_config",
     version="DEV",
     url="https://gitlab.illuin.tech/bot-factory/illuin-config/",
 
@@ -25,7 +25,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
     ],
 )
