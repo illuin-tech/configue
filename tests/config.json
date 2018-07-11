@@ -1,0 +1,10 @@
+{
+  "my_object": {
+    "()": "test_utils.MyObject",
+    "my_key": "my_value",
+    "my_other_key": {
+      "()": "test_utils.MyObject",
+      "my_key": "my_sub_value"
+    }
+  }
+}
