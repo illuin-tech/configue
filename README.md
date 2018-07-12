@@ -27,14 +27,14 @@ config = load_config_from_dict({
     }
 })
 
-
-print(config["my_object"])
-
 ```
 
 In this example, `config["my_object"]` is the value returned by the callable defined by the property `()`.
 It can be a class or a function.
 The value is the path used to import the callable.
+
+If you don't want to instantiate the object but still have a `"()"` key (useful for logging), you can use the value 
+`\()` instead, it will be replaced with `"()"` automatically.
 
 
 ## Loading external variables

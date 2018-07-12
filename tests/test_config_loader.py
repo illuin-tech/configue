@@ -68,6 +68,26 @@ class TestConfigLoader(unittest.TestCase):
         self.assertIsInstance(config_object.my_other_key, MyObject)
         self.assertEqual("my_sub_value", config_object.my_other_key.my_key)
 
+    def test_escaped_callable_dict(self):
+        config_dict = {
+            "my_object": {
+                "\()": "tests.external_module.MyObject",
+                "my_key": "my_value",
+                "my_other_key": {
+                    "()": "tests.external_module.MyObject",
+                    "my_key": "my_sub_value",
+                },
+            }
+        }
+
+        config_loader = ConfigLoader(config_dict)
+        config_object = config_loader.config["my_object"]
+
+        self.assertEqual(config_object["()"], "tests.external_module.MyObject",)
+        self.assertEqual("my_value", config_object["my_key"])
+        self.assertIsInstance(config_object["my_other_key"], MyObject)
+        self.assertEqual("my_sub_value", config_object["my_other_key"].my_key)
+
     def test_external_variable_loading(self):
         config_dict = {
             "my_key": "ext://logging.INFO"
