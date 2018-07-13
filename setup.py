@@ -20,7 +20,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["tests", "docs"]),
 
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",

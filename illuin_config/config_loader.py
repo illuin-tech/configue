@@ -25,6 +25,9 @@ class ConfigLoader(BaseConfigurator):
 
     def convert(self, value: Any) -> Any:
         value = BaseConfigurator.convert(self, value)
-        if isinstance(value, dict) and "()" in value:
-            return self.configure_custom(value)
+        if isinstance(value, dict):
+            if "()" in value:
+                return self.configure_custom(value)
+            if "\\()" in value:
+                value["()"] = value.pop("\\()")
         return value
