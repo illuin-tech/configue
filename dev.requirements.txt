@@ -1,4 +1,5 @@
--r requirements.txt
+# Setup dependencies
+.
 
 # Linting
 pylint>=1.8.0,<2.0.0

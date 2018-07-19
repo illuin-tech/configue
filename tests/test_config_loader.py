@@ -71,7 +71,7 @@ class TestConfigLoader(unittest.TestCase):
     def test_escaped_callable_dict(self):
         config_dict = {
             "my_object": {
-                "\()": "tests.external_module.MyObject",
+                "\\()": "tests.external_module.MyObject",
                 "my_key": "my_value",
                 "my_other_key": {
                     "()": "tests.external_module.MyObject",
