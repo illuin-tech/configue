@@ -1,8 +1,11 @@
 Changelog
 =========
 
+# 0.1.2
+- Added callable list support
+
 # 0.1.1
-- Added `_()` special value
+- Added `\()` special value to escape callable key
 
 # 0.1.0
 - Added `load_config_file` method
