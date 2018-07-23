@@ -1,4 +1,4 @@
-from logging.config import BaseConfigurator, ConvertingDict
+from logging.config import BaseConfigurator, ConvertingDict, ConvertingList
 from typing import Any, Dict
 
 
@@ -25,9 +25,11 @@ class ConfigLoader(BaseConfigurator):
 
     def convert(self, value: Any) -> Any:
         value = BaseConfigurator.convert(self, value)
-        if isinstance(value, dict):
+        if isinstance(value, ConvertingDict):
             if "()" in value:
                 return self.configure_custom(value)
             if "\\()" in value:
                 value["()"] = value.pop("\\()")
+        if isinstance(value, ConvertingList):
+            value = list(map(self.convert, value))
         return value

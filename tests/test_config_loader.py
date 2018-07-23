@@ -117,3 +117,24 @@ class TestConfigLoader(unittest.TestCase):
         self.assertEqual("my_value", config_object.my_key)
         self.assertIsInstance(config_object.my_other_key, MyObject)
         self.assertEqual("my_sub_value", config_object.my_other_key.my_key)
+
+    def test_list_loading(self):
+        config_dict = {
+            "my_objects": [{
+                "()": "tests.external_module.MyObject",
+                "my_key": "my_value",
+            }, {
+                "()": "tests.external_module.MyObject",
+                "my_key": "my_other_value",
+            }]
+        }
+
+        config_loader = ConfigLoader(config_dict)
+        config_objects = config_loader.config["my_objects"]
+
+        self.assertIsInstance(config_objects, list)
+        self.assertEqual(2, len(config_objects))
+        self.assertIsInstance(config_objects[0], MyObject)
+        self.assertIsInstance(config_objects[1], MyObject)
+        self.assertEqual("my_value", config_objects[0].my_key)
+        self.assertEqual("my_other_value", config_objects[1].my_key)
