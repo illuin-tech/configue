@@ -17,7 +17,7 @@ setuptools.setup(
         "pyyaml>=3.13.0,<4.0.0",
     ],
     python_requires=">=3.6,<4.0",
-    packages=setuptools.find_packages(exclude=["tests", "docs"]),
+    packages=setuptools.find_packages(include=["illuin_config"]),
 
     classifiers=[
         "Development Status :: 4 - Beta",
