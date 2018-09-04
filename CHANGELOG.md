@@ -1,4 +1,8 @@
 # Changelog
+## 1.3.1
+### Fixes
+- Fixed a bug that prevented accessing objects properties with `cfg://`
+
 
 ## 1.3.0
 ### Features
