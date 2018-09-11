@@ -1,4 +1,11 @@
 # Changelog
+## 2.0.0
+### Breaking changes
+- Removed escaped callable syntax `\()`
+
+### Fixes
+- Fixed a bug where tuples where not converted on access
+
 ## 1.3.1
 ### Fixes
 - Fixed a bug that prevented accessing objects properties with `cfg://`

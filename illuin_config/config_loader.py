@@ -1,4 +1,4 @@
-from logging.config import BaseConfigurator, ConvertingDict, ConvertingList
+from logging.config import BaseConfigurator, ConvertingDict, ConvertingList, ConvertingTuple
 from typing import Any, Dict, Tuple
 
 
@@ -28,10 +28,10 @@ class ConfigLoader(BaseConfigurator):
         if isinstance(value, ConvertingDict):
             if "()" in value:
                 return self.configure_custom(value)
-            if "\\()" in value:
-                value["()"] = value.pop("\\()")
-        if isinstance(value, ConvertingList):
+        elif isinstance(value, ConvertingList):
             value = list(map(self.convert, value))
+        elif isinstance(value, ConvertingTuple):
+            value = tuple(map(self.convert, value))
         return value
 
     def cfg_convert(self, value: str) -> Any:
