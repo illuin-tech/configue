@@ -83,7 +83,7 @@ class TestConfigLoader(unittest.TestCase):
         config_loader = ConfigLoader(config_dict)
         config_object = config_loader.config["my_object"]
 
-        self.assertEqual(config_object["()"], "tests.external_module.MyObject",)
+        self.assertEqual(config_object["()"], "tests.external_module.MyObject", )
         self.assertEqual("my_value", config_object["my_key"])
         self.assertIsInstance(config_object["my_other_key"], MyObject)
         self.assertEqual("my_sub_value", config_object["my_other_key"].my_key)
@@ -138,3 +138,73 @@ class TestConfigLoader(unittest.TestCase):
         self.assertIsInstance(config_objects[1], MyObject)
         self.assertEqual("my_value", config_objects[0].my_key)
         self.assertEqual("my_other_value", config_objects[1].my_key)
+
+    def test_cfg_convert_get_attribute(self):
+        config_dict = {
+            "my_object": {
+                "()": "tests.external_module.MyObject",
+                "my_key": "my_value",
+            },
+            "my_key": "cfg://my_object.my_key",
+        }
+
+        config_loader = ConfigLoader(config_dict)
+
+        self.assertEqual("my_value", config_loader.config["my_key"])
+
+    def test_cfg_convert_get_key(self):
+        config_dict = {
+            "my_dict": {
+                "my_key": "my_value",
+            },
+            "my_key": "cfg://my_dict.my_key",
+        }
+
+        config_loader = ConfigLoader(config_dict)
+
+        self.assertEqual("my_value", config_loader.config["my_key"])
+
+    def test_cfg_convert_get_key_with_index(self):
+        config_dict = {
+            "my_dict": {
+                "my_key": "my_value",
+            },
+            "my_key": "cfg://my_dict[my_key]",
+        }
+
+        config_loader = ConfigLoader(config_dict)
+
+        self.assertEqual("my_value", config_loader.config["my_key"])
+
+    def test_cfg_convert_get_index(self):
+        config_dict = {
+            "my_list": [
+                "my_value"
+            ],
+            "my_key": "cfg://my_list[0]",
+        }
+
+        config_loader = ConfigLoader(config_dict)
+
+        self.assertEqual("my_value", config_loader.config["my_key"])
+
+    def test_cfg_convert_invalid_pointer_raises_value_error(self):
+        config_dict = {
+            "my_key": "cfg://",
+        }
+
+        config_loader = ConfigLoader(config_dict)
+
+        with self.assertRaises(ValueError):
+            _ = config_loader.config["my_key"]
+
+    def test_cfg_convert_invalid_subpointer_raises_value_error(self):
+        config_dict = {
+            "my_other_key": "123",
+            "my_key": "cfg://my_other_key.",
+        }
+
+        config_loader = ConfigLoader(config_dict)
+
+        with self.assertRaises(ValueError):
+            _ = config_loader.config["my_key"]
