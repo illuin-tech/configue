@@ -10,5 +10,9 @@ my_object:
       test_env3: ${my_unknown_var}
       test_env4: ${my_unknown_var-default_value}
       test_env5: pre${my_var-default_value}post
-      test_env6: !env "${my_var}"
-      test_path: !path my_path.txt
+      test_env6: !env "${my_int_var}"
+      test_env7: ${my_int_var}
+      test_env8: ${my_bool_var}
+      test_env9: pre ${my_var} and ${my_int_var} post
+      test_path1: !path my_path.txt
+      test_path2: !path my_path/${my_var}.txt

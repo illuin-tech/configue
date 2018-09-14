@@ -1,12 +1,9 @@
 import json
-import os
-import re
 import warnings
 from logging.config import ConvertingDict
 from typing import Dict
 
-import yaml
-
+from illuin_config.yaml_loader import YamlLoader
 from .config_loader import ConfigLoader
 
 
@@ -26,27 +23,8 @@ def load_config_from_yaml_file(file_path: str) -> ConvertingDict:
     :param file_path: Absolute path to the YAML file containing the configuration
     :return: the converting dict corresponding to the file.
     """
-    # Matches "prefix${myvar-default}suffix" -> "prefix", "myvar", "default", "suffix"
-    # or "${myvar}" -> "", "myvar", "", ""
 
-    _env_pattern_regex = re.compile(r"^([^$]*)\${([^-}]*)-?([^}]*)}(.*)$")
-
-    def yaml_env_constructor(loader: yaml.Loader, node: yaml.Node) -> str:
-        value: str = loader.construct_scalar(node)
-        prefix, env_var_name, default_value, suffix = _env_pattern_regex.match(value).group(1, 2, 3, 4)
-        return f"{prefix}{os.environ.get(env_var_name, default_value)}{suffix}"
-
-    yaml.add_implicit_resolver("!env", _env_pattern_regex)
-    yaml.add_constructor("!env", yaml_env_constructor)
-
-    def yaml_path_constructor(loader: yaml.Loader, node: yaml.Node) -> str:
-        value = loader.construct_scalar(node)
-        return os.path.join(os.path.dirname(file_path), value)
-
-    yaml.add_constructor("!path", yaml_path_constructor)
-
-    with open(file_path, "r", encoding="utf-8") as config_file:
-        config_dict = yaml.load(config_file)
+    config_dict = YamlLoader(file_path).load()
 
     return load_config_from_dict(config_dict)
 

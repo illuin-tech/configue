@@ -1,4 +1,15 @@
 # Changelog
+## Unreleased
+
+
+## 2.1.0
+### Features
+- Environment variables can now be inserted in `!path` values
+- Values that contain environment variables are now cast into strings, booleans, ints or floats
+
+### Fixes
+- Multiple environment variables can now be inserted in the same value
+
 ## 2.0.0
 ### Breaking changes
 - Removed escaped callable syntax `\()`

@@ -112,7 +112,8 @@ my_final_key: !env "{${var_name}}"
 ```
 This will resolve as `{my_value}`.
 
-In all those examples, if both the variable and the default value are not defined, the value is replaced by `""`.
+In all those examples, if both the variable and the default value are not defined, the value is replaced by `""`
+and then cast by the yaml loader (`""` becomes `None`, `"10"` becomes `10`, and `"true"` becomes `True`).
 
 ### Relative paths
 
