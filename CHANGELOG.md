@@ -6,6 +6,7 @@
 ### Features
 - Environment variables can now be inserted in `!path` values
 - Values that contain environment variables are now cast into strings, booleans, ints or floats
+- You can use `!import` to concatenate files
 
 ### Fixes
 - Multiple environment variables can now be inserted in the same value

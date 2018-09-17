@@ -18,6 +18,7 @@ class YamlLoader:
         yaml.add_implicit_resolver("!env", self._env_pattern_regex)
         yaml.add_constructor("!env", self._yaml_env_constructor)
         yaml.add_constructor("!path", self._yaml_path_constructor)
+        yaml.add_constructor("!import", self._yaml_import_constructor)
 
         with open(self._file_path) as config_file:
             return yaml.load(config_file)
@@ -40,6 +41,13 @@ class YamlLoader:
         str_value = os.path.join(os.path.dirname(self._file_path), raw_value)
         # reload node to eval environment variables
         return self._get_reloaded_node(loader, str_value, node, "path")
+
+    def _yaml_import_constructor(self, loader: yaml.Loader, node: yaml.ScalarNode) -> Any:
+        raw_value = loader.construct_scalar(node)
+        templated_value = str(self._get_reloaded_node(loader, raw_value, node, "import"))
+        imported_path = os.path.join(os.path.dirname(self._file_path), templated_value)
+        loader = YamlLoader(imported_path)
+        return loader.load()
 
     @staticmethod
     def _get_reloaded_node(loader: yaml.Loader, str_value: str, node: yaml.ScalarNode, constructor_type: str) -> Any:

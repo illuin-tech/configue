@@ -8,6 +8,8 @@ from tests.external_module import MyObject
 
 class TestUtils(unittest.TestCase):
     def setUp(self):
+        os.environ["file_name"] = "list_config"
+
         self.yaml_file_path = os.path.join(os.path.dirname(__file__), "config.yaml")
         self.json_file_path = os.path.join(os.path.dirname(__file__), "config.json")
 
@@ -39,7 +41,6 @@ class TestUtils(unittest.TestCase):
         self.assertEqual("my_sub_value", config.my_other_key.my_key)
 
     def test_load_config_from_json_file(self):
-
         config = load_config_from_json_file(self.json_file_path)["my_object"]
 
         self.assertIsInstance(config, MyObject)
