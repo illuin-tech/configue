@@ -112,7 +112,8 @@ my_final_key: !env "{${var_name}}"
 ```
 This will resolve as `{my_value}`.
 
-In all those examples, if both the variable and the default value are not defined, the value is replaced by `""`.
+In all those examples, if both the variable and the default value are not defined, the value is replaced by `""`
+and then cast by the yaml loader (`""` becomes `None`, `"10"` becomes `10`, and `"true"` becomes `True`).
 
 ### Relative paths
 
@@ -128,3 +129,22 @@ Do not start the relative path by `/` as it will be treated as an absolute path 
 ````yaml
 my_path: !path /my_folder/my_file.txt  # This will resolve to "/my_folder/my_file.txt" 
 ````
+
+### Importing other files
+
+You can import another file directly in your YAML config file:
+
+````yaml
+# config.yml
+my_import: !import my_folder/my_other_config.yml
+````
+
+```yaml
+my_other_config.yml
+- var_1
+- var_2
+```
+
+This will resolve to `"my_import": [var_1, var_2]`
+
+Do not start the relative path by `/` as it will be treated as an absolute path instead.
