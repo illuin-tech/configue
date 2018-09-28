@@ -2,6 +2,12 @@
 ## Unreleased
 
 
+## 2.2.0
+### Features
+- Environment variables can now contain lists in YAML files, use `!list ${my_var}` to create a python list when loading
+the file.
+
+
 ## 2.1.0
 ### Features
 - Environment variables can now be inserted in `!path` values
@@ -11,12 +17,14 @@
 ### Fixes
 - Multiple environment variables can now be inserted in the same value
 
+
 ## 2.0.0
 ### Breaking changes
 - Removed escaped callable syntax `\()`
 
 ### Fixes
 - Fixed a bug where tuples where not converted on access
+
 
 ## 1.3.1
 ### Fixes

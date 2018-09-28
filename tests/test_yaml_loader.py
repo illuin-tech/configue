@@ -1,10 +1,7 @@
 import os
 import unittest
-from unittest.mock import patch
 
-from yaml.constructor import ConstructorError
-
-from illuin_config.yaml_loader import YamlLoader, yaml
+from illuin_config.yaml_loader import YamlLoader
 
 
 class TestYamlLoader(unittest.TestCase):
@@ -12,6 +9,7 @@ class TestYamlLoader(unittest.TestCase):
         os.environ["my_var"] = "my_value"
         os.environ["my_int_var"] = "10"
         os.environ["my_bool_var"] = "false"
+        os.environ["my_list_var"] = "my_value,my_list_value"
         os.environ["file_name"] = "list_config"
 
         yaml_file_path = os.path.join(os.path.dirname(__file__), "yaml_loader_config.yaml")
@@ -42,7 +40,9 @@ class TestYamlLoader(unittest.TestCase):
         self.assertEqual(["my_str_value", "my_value"], my_object_keys["test_import_1"])
         self.assertEqual(["my_str_value", "my_value"], my_object_keys["test_import_2"])
 
-    def test_load_recursion_error(self):
-        yaml_loader = YamlLoader(os.path.join(os.path.dirname(__file__), "simple_config.yaml"))
-        with patch.object(yaml.Loader, "resolve", return_value="!env"), self.assertRaises(ConstructorError):
-            yaml_loader.load()
+    def test_load_list_from_yaml_file(self):
+        my_object_keys = self.yaml_loader.load()
+
+        self.assertEqual(["my_value", "my_other_value"], my_object_keys["test_list_1"])
+        self.assertEqual(["my_value", "my_other_value"], my_object_keys["test_list_2"])
+        self.assertEqual(["my_value", "my_list_value"], my_object_keys["test_list_3"])

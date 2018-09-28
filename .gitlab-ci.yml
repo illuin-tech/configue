@@ -70,8 +70,8 @@ deploy:
     - . ./env/bin/activate
   script:
     - sed -i "s#version=\"DEV\",#version=\"${CI_COMMIT_TAG}\",#g" setup.py
-    - python setup.py sdist
-    - twine upload -r nexus dist/illuin_config-${CI_COMMIT_TAG}.tar.gz
+    - python setup.py sdist bdist_wheel
+    - twine upload -r nexus dist/illuin[-_]config-${CI_COMMIT_TAG}*
   tags:
     - docker
   only:
