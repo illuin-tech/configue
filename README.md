@@ -115,6 +115,16 @@ This will resolve as `{my_value}`.
 In all those examples, if both the variable and the default value are not defined, the value is replaced by `""`
 and then cast by the yaml loader (`""` becomes `None`, `"10"` becomes `10`, and `"true"` becomes `True`).
 
+#### Lists in environment variables
+You can store a list in your environment variable, and use this syntax to split it on commas:
+```yaml
+my_list: !list ${my_var}
+```
+with `my_var=my_first_value,my_second_value`
+
+This will resolve as `["my_value", "my_second_value"]`.
+
+
 ### Relative paths
 
 If you want to expand a relative path in your YAML config file:

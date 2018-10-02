@@ -11,3 +11,6 @@ test_path1: !path my_path.txt
 test_path2: !path my_path/${my_var}.txt
 test_import_1: !import list_config.yaml
 test_import_2: !import ${file_name}.yaml
+test_list_1: [my_value, my_other_value]
+test_list_2: [!env "${my_var}",my_other_value]
+test_list_3: !list ${my_list_var}
