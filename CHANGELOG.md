@@ -2,6 +2,11 @@
 ## Unreleased
 
 
+## 2.2.1
+### Fixes
+- Emojis are now supported in yaml files
+
+
 ## 2.2.0
 ### Features
 - Environment variables can now contain lists in YAML files, use `!list ${my_var}` to create a python list when loading

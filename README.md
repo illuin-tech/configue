@@ -1,5 +1,5 @@
-illuin-logging
-==============
+illuin-config
+=============
 
 This repository contains some helpers to easily load configuration elements from files, it is based on `logging.config`.
 
