@@ -3,6 +3,7 @@ import re
 from typing import Any
 
 import yaml
+from yaml.reader import Reader
 
 
 class YamlLoader:
@@ -19,7 +20,11 @@ class YamlLoader:
         yaml.add_constructor("!import", self._import_constructor)
         yaml.add_constructor("!list", self._list_constructor)
 
-        with open(self._file_path) as config_file:
+        # Add emojis to list of allowed characters
+        Reader.NON_PRINTABLE = re.compile(
+            "[^\x09\x0A\x0D\x20-\x7E\x85\xA0-\uD7FF\uE000-\uFFFD\u203C-\u3299\U0001F000-\U0001F999]")
+
+        with open(self._file_path, encoding="utf-8") as config_file:
             return yaml.load(config_file)
 
     def _env_constructor(self, loader: yaml.Loader, node: yaml.ScalarNode) -> Any:

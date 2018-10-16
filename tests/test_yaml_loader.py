@@ -46,3 +46,8 @@ class TestYamlLoader(unittest.TestCase):
         self.assertEqual(["my_value", "my_other_value"], my_object_keys["test_list_1"])
         self.assertEqual(["my_value", "my_other_value"], my_object_keys["test_list_2"])
         self.assertEqual(["my_value", "my_list_value"], my_object_keys["test_list_3"])
+
+    def test_load_unicode_from_yaml_file(self):
+        my_object_keys = self.yaml_loader.load()
+
+        self.assertEqual("🤖‼️", my_object_keys["test_unicode"])

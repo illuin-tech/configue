@@ -1,3 +1,4 @@
+test_unicode: 🤖‼️
 test_env1: ${my_var}
 test_env2: ${my_var-default-value}
 test_env3: ${my_unknown_var}
