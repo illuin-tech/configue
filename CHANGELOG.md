@@ -1,5 +1,8 @@
 # Changelog
 ## Unreleased
+## 2.2.2
+### Fixes
+- `~` paths are correctly expanded when used with `!path` in yaml files
 
 
 ## 2.2.1
