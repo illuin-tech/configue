@@ -47,7 +47,8 @@ class YamlLoader:
         raw_value = loader.construct_scalar(node)
         # reload node to eval environment variables
         new_value = str(self._get_reloaded_value(raw_value))
-        full_path = os.path.join(os.path.dirname(self._file_path), new_value)
+        expanded_new_value = os.path.expanduser(new_value)
+        full_path = os.path.join(os.path.dirname(self._file_path), expanded_new_value)
         return full_path
 
     def _import_constructor(self, loader: yaml.Loader, node: yaml.ScalarNode) -> Any:

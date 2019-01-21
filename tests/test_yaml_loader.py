@@ -11,6 +11,7 @@ class TestYamlLoader(unittest.TestCase):
         os.environ["my_bool_var"] = "false"
         os.environ["my_list_var"] = "my_value,my_list_value"
         os.environ["file_name"] = "list_config"
+        os.environ["my_home"] = "~"
 
         yaml_file_path = os.path.join(os.path.dirname(__file__), "yaml_loader_config.yaml")
         self.yaml_loader = YamlLoader(yaml_file_path)
@@ -20,6 +21,9 @@ class TestYamlLoader(unittest.TestCase):
 
         self.assertEqual(os.path.join(os.path.dirname(__file__), "my_path.txt"), my_object_keys["test_path1"])
         self.assertEqual(os.path.join(os.path.dirname(__file__), "my_path/my_value.txt"), my_object_keys["test_path2"])
+        self.assertEqual(os.path.expanduser("~/my_value.txt"), my_object_keys["test_path3"])
+        self.assertEqual(os.path.expanduser("~/my_value.txt"), my_object_keys["test_path4"])
+        self.assertEqual(os.path.join(os.path.dirname(__file__), "my_path/~.txt"), my_object_keys["test_path5"])
 
     def test_load_env_from_yaml_file(self):
         my_object_keys = self.yaml_loader.load()
