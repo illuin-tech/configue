@@ -43,6 +43,9 @@ class TestYamlLoader(unittest.TestCase):
 
         self.assertEqual(["my_str_value", "my_value"], my_object_keys["test_import_1"])
         self.assertEqual(["my_str_value", "my_value"], my_object_keys["test_import_2"])
+        self.assertEqual(os.path.join(os.path.dirname(__file__), "sub_folder/my_file.txt"),
+                         my_object_keys["test_import_3"])
+        self.assertEqual(os.path.join(os.path.dirname(__file__), "my_file.txt"), my_object_keys["test_import_4"])
 
     def test_load_list_from_yaml_file(self):
         my_object_keys = self.yaml_loader.load()

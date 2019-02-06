@@ -12,20 +12,21 @@ class YamlLoader:
         # Matches "${myvar-default}" -> "${", "myvar", "default", "}"
         # or "${myvar}" -> "${", "myvar", "", "}"
         self._env_pattern_regex = re.compile(r"(?:(?!\${[^-}]+}).)*(\${)([^-}]+)-?([^}]*)(})")
+        self._loader = type("Loader", (yaml.Loader,), {})
 
     def load(self) -> Any:
-        yaml.add_implicit_resolver("!env", self._env_pattern_regex)
-        yaml.add_constructor("!env", self._env_constructor)
-        yaml.add_constructor("!path", self._path_constructor)
-        yaml.add_constructor("!import", self._import_constructor)
-        yaml.add_constructor("!list", self._list_constructor)
+        yaml.add_implicit_resolver("!env", self._env_pattern_regex, Loader=self._loader)
+        yaml.add_constructor("!env", self._env_constructor, Loader=self._loader)
+        yaml.add_constructor("!path", self._path_constructor, Loader=self._loader)
+        yaml.add_constructor("!import", self._import_constructor, Loader=self._loader)
+        yaml.add_constructor("!list", self._list_constructor, Loader=self._loader)
 
         # Add emojis to list of allowed characters
         Reader.NON_PRINTABLE = re.compile(
             "[^\x09\x0A\x0D\x20-\x7E\x85\xA0-\uD7FF\uE000-\uFFFD\u203C-\u3299\U0001F000-\U0001F999]")
 
         with open(self._file_path, encoding="utf-8") as config_file:
-            return yaml.load(config_file)
+            return yaml.load(config_file, self._loader)
 
     def _env_constructor(self, loader: yaml.Loader, node: yaml.ScalarNode) -> Any:
         raw_value: str = loader.construct_scalar(node)
@@ -66,7 +67,6 @@ class YamlLoader:
         split_value = new_value.split(",")
         return split_value
 
-    @staticmethod
-    def _get_reloaded_value(str_value: str) -> Any:
+    def _get_reloaded_value(self, str_value: str) -> Any:
         # Reload the value
-        return yaml.load(str_value)
+        return yaml.load(str_value, Loader=self._loader)
