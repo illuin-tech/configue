@@ -1,5 +1,10 @@
 # Changelog
 ## Unreleased
+## 2.2.3
+### Fixes
+- `!path` and `!import` now work as expected when used after importing a file from another folder
+
+
 ## 2.2.2
 ### Fixes
 - `~` paths are correctly expanded when used with `!path` in yaml files

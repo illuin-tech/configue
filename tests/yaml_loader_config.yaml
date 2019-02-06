@@ -15,6 +15,8 @@ test_path4: !path ${my_home}/${my_var}.txt
 test_path5: !path my_path/${my_home}.txt
 test_import_1: !import list_config.yaml
 test_import_2: !import ${file_name}.yaml
+test_import_3: !import sub_folder/sub_config.yml
+test_import_4: !path my_file.txt  # test path after sub folder import
 test_list_1: [my_value, my_other_value]
 test_list_2: [!env "${my_var}",my_other_value]
 test_list_3: !list ${my_list_var}
