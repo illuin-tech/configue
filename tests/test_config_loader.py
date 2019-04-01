@@ -1,5 +1,6 @@
 import logging
 import unittest
+from unittest.mock import patch
 
 from illuin_config import ConfigLoader
 from tests.external_module import MyObject
@@ -209,3 +210,41 @@ class TestConfigLoader(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             _ = config_loader.config["my_key"]
+
+    def test_load_dict_with_kwargs(self):
+        config_dict = {
+            "my_dict": {
+                "my_key": "cfg://my_value",
+            },
+            "my_value": 1,
+        }
+
+        config_loader = ConfigLoader(config_dict)
+        new_dict = {**config_loader.config["my_dict"]}
+        self.assertEqual(1, new_dict["my_key"])
+
+    def test_load_config_loop_works(self):
+        config_dict = {
+            "my_dict": {
+                "my_key": "cfg://my_dict.my_value",
+                "my_value": 1,
+            },
+        }
+
+        config_loader = ConfigLoader(config_dict)
+        self.assertEqual(1, config_loader.config["my_dict"]["my_key"])
+
+    @patch("logging.Logger.error")
+    def test_init_exception_logs_error(self, mock_error):
+        config_dict = {
+            "my_object": {
+                "()": "unknown_class",
+            },
+        }
+        config_loader = ConfigLoader(config_dict)
+
+        with self.assertRaises(ValueError):
+            _ = config_loader.config["my_object"]
+
+        mock_error.assert_called_with("Could not instantiate unknown_class: ValueError(\"Cannot resolve "
+                                      "'unknown_class': No module named 'unknown_class'\",)")

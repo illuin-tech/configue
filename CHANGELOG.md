@@ -1,5 +1,13 @@
 # Changelog
 ## Unreleased
+## 2.3.0
+### Features
+- Using `**kwargs`, `.items()` or `.values()` with a dictionary created with the `ConfigLoader` now converts the value
+
+### Fixes
+- An error log has been added when a class instantiation fails
+
+
 ## 2.2.3
 ### Fixes
 - `!path` and `!import` now work as expected when used after importing a file from another folder
