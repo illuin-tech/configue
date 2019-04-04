@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from typing import Any
@@ -7,11 +8,13 @@ from yaml.reader import Reader
 
 
 class YamlLoader:
+    logger = logging.getLogger(__name__)
+
     def __init__(self, file_path: str) -> None:
         self._file_path = file_path
-        # Matches "${myvar-default}" -> "${", "myvar", "default", "}"
-        # or "${myvar}" -> "${", "myvar", "", "}"
-        self._env_pattern_regex = re.compile(r"(?:(?!\${[^-}]+}).)*(\${)([^-}]+)-?([^}]*)(})")
+        # Matches "${myvar-default}" -> "${", "myvar", "-", "default", "}"
+        # or "${myvar}" -> "${", "myvar", "", "", "}"
+        self._env_pattern_regex = re.compile(r"(?:(?!\${[^-}]+}).)*(\${)([^-}]+)(-?)([^}]*)(})")
         self._loader = type("Loader", (yaml.Loader,), {})
 
     def load(self) -> Any:
@@ -33,10 +36,12 @@ class YamlLoader:
         replaced_str = ""
         end_pos = 0
         for match in self._env_pattern_regex.finditer(raw_value):
-            env_var_name, default_value = match.group(2, 3)
+            env_var_name, has_default, default_value = match.group(2, 3, 4)
             start_pos = match.start(1)
+            if env_var_name not in os.environ and has_default:
+                self.logger.warning(f"Missing environment var: '{env_var_name}', no default is set")
             replaced_str += f"{raw_value[end_pos:start_pos]}{os.environ.get(env_var_name, default_value)}"
-            end_pos = match.end(4)
+            end_pos = match.end(5)
         replaced_str += raw_value[end_pos:]
         # Put back quotes
         if node.style == "\"":

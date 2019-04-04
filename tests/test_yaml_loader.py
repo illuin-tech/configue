@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest.mock import patch
 
 from illuin_config.yaml_loader import YamlLoader
 
@@ -25,7 +26,8 @@ class TestYamlLoader(unittest.TestCase):
         self.assertEqual(os.path.expanduser("~/my_value.txt"), my_object_keys["test_path4"])
         self.assertEqual(os.path.join(os.path.dirname(__file__), "my_path/~.txt"), my_object_keys["test_path5"])
 
-    def test_load_env_from_yaml_file(self):
+    @patch("logging.Logger.warning")
+    def test_load_env_from_yaml_file(self, mock_warning):
         my_object_keys = self.yaml_loader.load()
 
         self.assertEqual("my_value", my_object_keys["test_env1"])
@@ -37,6 +39,7 @@ class TestYamlLoader(unittest.TestCase):
         self.assertEqual(10, my_object_keys["test_env7"])
         self.assertFalse(my_object_keys["test_env8"])
         self.assertEqual("pre my_value and 10 post", my_object_keys["test_env9"])
+        mock_warning.assert_called_once_with("Missing environment var: 'my_unknown_var', no default is set")
 
     def test_load_import_from_yaml_file(self):
         my_object_keys = self.yaml_loader.load()
