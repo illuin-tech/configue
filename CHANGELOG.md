@@ -1,5 +1,9 @@
 # Changelog
 ## Unreleased
+### Features
+- Added a warning log when an environment variable is missing
+
+
 ## 2.3.0
 ### Features
 - Using `**kwargs`, `.items()` or `.values()` with a dictionary created with the `ConfigLoader` now converts the value
