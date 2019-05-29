@@ -4,7 +4,6 @@ import re
 from typing import Any
 
 import yaml
-from yaml.reader import Reader
 
 
 class YamlLoader:
@@ -15,7 +14,8 @@ class YamlLoader:
         # Matches "${myvar-default}" -> "${", "myvar", "-", "default", "}"
         # or "${myvar}" -> "${", "myvar", "", "", "}"
         self._env_pattern_regex = re.compile(r"(?:(?!\${[^-}]+}).)*(\${)([^-}]+)(-?)([^}]*)(})")
-        self._loader = type("Loader", (yaml.Loader,), {})
+        # Custom loader to bind our constructors without impacting the yaml class or the other instances of YamlLoader
+        self._loader = type("Loader", (yaml.FullLoader,), {})
 
     def load(self) -> Any:
         yaml.add_implicit_resolver("!env", self._env_pattern_regex, Loader=self._loader)
@@ -23,10 +23,6 @@ class YamlLoader:
         yaml.add_constructor("!path", self._path_constructor, Loader=self._loader)
         yaml.add_constructor("!import", self._import_constructor, Loader=self._loader)
         yaml.add_constructor("!list", self._list_constructor, Loader=self._loader)
-
-        # Add emojis to list of allowed characters
-        Reader.NON_PRINTABLE = re.compile(
-            "[^\x09\x0A\x0D\x20-\x7E\x85\xA0-\uD7FF\uE000-\uFFFD\u203C-\u3299\U0001F000-\U0001F999]")
 
         with open(self._file_path, encoding="utf-8") as config_file:
             return yaml.load(config_file, self._loader)

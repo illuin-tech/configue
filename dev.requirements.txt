@@ -2,8 +2,8 @@
 -e .
 
 # Linting
-pylint>=1.8.0,<2.0.0
-pylint-quotes==0.1.9
+pylint>=2.0.0,<3.0.0
+pylint-quotes==0.2.1
 
 # Publish
 twine>=1.11.0,<2.0.0
@@ -12,5 +12,5 @@ twine>=1.11.0,<2.0.0
 pytest-cov>=2.5.0,<3.0.0
 
 # Docs
-sphinx>=1.7.0,<2.0.0
+sphinx>=2.0.0,<3.0.0
 sphinx-autodoc-typehints>=1.3.0,<2.0.0

@@ -14,7 +14,7 @@ setuptools.setup(
     platforms="any",
 
     install_requires=[
-        "pyyaml>=3.13.0,<4.0.0",
+        "pyyaml>=5.1.0,<6.0.0",
     ],
     python_requires=">=3.6,<4.0",
     packages=setuptools.find_packages(include=["illuin_config", "illuin_config.*"]),
