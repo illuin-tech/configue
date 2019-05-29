@@ -1,5 +1,6 @@
 # Changelog
 ## Unreleased
+## 2.4.0
 ### Features
 - Added a warning log when an environment variable is missing
 
