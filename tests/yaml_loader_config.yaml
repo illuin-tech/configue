@@ -1,7 +1,7 @@
 test_unicode: 🤖‼️
 test_env1: ${my_var}
 test_env2: ${my_var-default-value}
-test_env3: ${my_unknown_var}
+test_env3: ${my_unknown_var_without_default}
 test_env4: ${my_unknown_var-default_value}
 test_env5: pre${my_var-default_value}post
 test_env6: !env "${my_int_var}"
