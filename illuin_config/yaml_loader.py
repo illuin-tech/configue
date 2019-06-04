@@ -38,7 +38,7 @@ class YamlLoader:
         for match in self._env_pattern_regex.finditer(raw_value):
             env_var_name, has_default, default_value = match.group(2, 3, 4)
             start_pos = match.start(1)
-            if env_var_name not in os.environ and has_default:
+            if env_var_name not in os.environ and not has_default:
                 self.logger.warning(f"Missing environment var: '{env_var_name}', no default is set")
             replaced_str += f"{raw_value[end_pos:start_pos]}{os.environ.get(env_var_name, default_value)}"
             end_pos = match.end(5)

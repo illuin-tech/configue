@@ -1,5 +1,10 @@
 # Changelog
 ## Unreleased
+## 2.4.1
+### Fixes
+- Fixed warnings for missing environment variables appearing when a default was set
+
+
 ## 2.4.0
 ### Features
 - Added a warning log when an environment variable is missing
