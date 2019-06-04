@@ -1,5 +1,9 @@
 # Changelog
 ## Unreleased
+### Enhancements
+- Updated dependency: `pyyaml` to `5.1`
+
+
 ## 2.4.1
 ### Fixes
 - Fixed warnings for missing environment variables appearing when a default was set

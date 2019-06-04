@@ -52,11 +52,10 @@ class ConfigLoader(BaseConfigurator):
         match = self.WORD_PATTERN.match(str_to_parse)
         if match is None:
             raise ValueError(f"Unable to convert {value!r}")
-        else:
-            str_to_parse = str_to_parse[match.end():]
-            parsed_object = self.config[match.groups()[0]]
-            while str_to_parse:
-                parsed_object, str_to_parse = self._parse_next_cfg_level(parsed_object, str_to_parse)
+        str_to_parse = str_to_parse[match.end():]
+        parsed_object = self.config[match.groups()[0]]
+        while str_to_parse:
+            parsed_object, str_to_parse = self._parse_next_cfg_level(parsed_object, str_to_parse)
         return parsed_object
 
     def _parse_next_cfg_level(self, parsed_object: Any, str_to_parse: str) -> Tuple[Any, str]:
