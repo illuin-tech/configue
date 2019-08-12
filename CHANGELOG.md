@@ -1,5 +1,6 @@
 # Changelog
 ## Unreleased
+## 2.4.2
 ### Enhancements
 - Updated dependency: `pyyaml` to `5.1`
 
