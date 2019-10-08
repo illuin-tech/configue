@@ -122,13 +122,15 @@ class TestConfigLoader(unittest.TestCase):
 
     def test_tuple_loading(self):
         config_dict = {
-            "my_objects": ({
-                               "()": "tests.external_module.MyObject",
-                               "my_key": "my_value",
-                           }, {
-                               "()": "tests.external_module.MyObject",
-                               "my_key": "my_other_value",
-                           })
+            "my_objects": (
+                {
+                    "()": "tests.external_module.MyObject",
+                    "my_key": "my_value",
+                }, {
+                    "()": "tests.external_module.MyObject",
+                    "my_key": "my_other_value",
+                }
+            )
         }
 
         config_loader = ConfigLoader(config_dict)
