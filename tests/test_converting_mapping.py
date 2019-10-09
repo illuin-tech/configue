@@ -45,6 +45,7 @@ class TestConvertingMapping(unittest.TestCase):
             _ = self.converting_mapping["my_unknown_key"]
 
     def test_iter(self):
+        # pylint: disable=unnecessary-comprehension
         self.assertCountEqual(["my_key"], [key for key in self.converting_mapping])
 
     def test_contains(self):

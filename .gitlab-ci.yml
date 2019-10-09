@@ -42,6 +42,7 @@ lint:
     - . ./env/bin/activate
   script:
     - pylint --load-plugins pylint_quotes illuin_config
+    - pylint --load-plugins pylint_quotes tests --disable=protected-access,too-many-instance-attributes,no-self-use
   tags:
     - docker
 
