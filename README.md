@@ -1,123 +1,117 @@
 illuin-config
 =============
 
-This repository contains some helpers to easily load configuration elements from files, it is based on `logging.config`.
+A YAML parser with advanced functionalities to ease your application configuration.
 
-The full API documentation is available in the [docs](./docs) folder.
+# Who is this library for ?
+This library is meant to be used in medium to large-scale applications, that have a lot of parameters to configure. 
+
+Modular applications especially can greatly benefit from using `illuin-config` to easily inject new modules.
+
+# Installation
+
+Run `pip install illuin-config` to install from PyPI.
+
+Run `pip install .` to install from sources.
 
 # Usage
 
-## Loading callables
-
-This is useful if you want to insert a few environment variables.
-
-```python
-from illuin_config import load_config_from_dict
-
-from my_project import settings
-
-
-config = load_config_from_dict({
-    "my_object": {
-        "()": "path.to.callable",
-        "my_argument": settings.MY_ARGUMENT,
-        "my_other_argument": {
-            "()": "path.to.other.callable"
-        }
-    }
-})
-```
-
-In this example, `config["my_object"]` is the value returned by the callable defined by the property `()`.
-It can be a class or a function.
-The value is the path used to import the callable.
-
-## Loading external variables
+### Basic usage
+This library uses [PyYAML](https://github.com/yaml/pyyaml) to parse the YAML files and return the file content.
 
 ```python
-from illuin_config import load_config_from_dict
+from illuin_config import load_config_from_file
 
 
-config = load_config_from_dict({
-    "my_object": {
-        "()": "path.to.callable",
-        "my_argument": "ext://my_other_project.settings.MY_ARGUMENT",
-    }
-})
+config = load_config_from_file("/path/to/yaml/file.yml")
 ```
 
-When a value starts with `ext://`, the value will be imported from another module.
+### Instantiating classes
 
-
-## Loading internal variables
+Use `()` in your YAML files to instantiate classes:
+```yaml
+# config.yml
+(): "my_project.MyAwesomeClass"
+my_argument: "my_value"
+my_other_argument:
+  (): "my_project.my_module.MyOtherClass"
+```
 
 ```python
-from illuin_config import load_config_from_dict
+from illuin_config import load_config_from_file
+from my_project import MyAwesomeClass
+from my_project.my_module import MyOtherClass
 
 
-config = load_config_from_dict({
-    "my_object": {
-        "()": "path.to.callable",
-        "my_argument": "my_value",
-    },
-    "my_other_object": "cfg://my_object"
-})
+my_instance = load_config_from_file("config.yml")
+assert isinstance(my_instance, MyAwesomeClass)
+assert my_instance.my_argument == "my_value"
+assert isinstance(my_instance.my_other_argument, MyOtherClass)
 ```
 
-When a value starts with `cfg://`, the value will be loaded from the same configuration dictionary
-(useful for a DRY configuration).
+Note that the instance is lazy-loaded if it is contained in a list or a dictionary, it is only created when the element
+is called.
 
+### Loading external variables
 
-## Loading configuration files
-
-When the configuration becomes too complicated, you can store the dictionary in a `.yaml` file.
-
-```python
-from illuin_config import load_config_from_yaml_file, load_config_from_file
-
-
-yaml_config = load_config_from_yaml_file("/path/to/my/file.yaml")
-# This can be a YAML or a JSON (deprecated) file, the file extension is used to determine the file type
-file_config = load_config_from_file("/path/to/my/file.yaml")
+```yaml
+# config.yml
+my_argument: ext://my_project.my_module.my_variable
 ```
 
-## Using YAML templating
-These syntax helpers are only available when loading the configuration from a YAML file (not JSON or a dictionary).
+When a value starts with `ext://`, the value will be imported from the corresponding python module.
 
-You can use only one tag at a time (you can't put a path and and environment variable in the same value).
+
+### Loading internal variables
+
+```yaml
+# config.yml
+my_object:
+    my_instance:
+        (): my_project.MyClass
+my_instance_shortcut: cfg://my_object.my_instance
+```
+
+When a value starts with `cfg://`, the value will be loaded from the same configuration file (useful for a DRY
+configuration).
 
 ### Environment variables
 
 If you want to load an environment variable in your YAML config file, you can use this syntax:
 ```yaml
+# config.yml
 my_key: ${var_name}
 ```
 This will resolve as `"my_value"` if the environment variable `var_name` is set to this value.
 
 If you need a default value in case the environment variable is not set:
 ```yaml
+# config.yml
 my_key: ${var_name-default}
 ```
 
 You can insert this syntax in the middle of a string:
 ```yaml
+# config.yml
 my_key: prefix${var_name-default}suffix
 ```
-This will resolve as `"prefixdefault_valuesuffix"` if the value is not set, `"prefixmy_value_suffix"` if it is.
+This will resolve as `"prefixmy_value_suffix"` if the value is set, `"prefixdefault_valuesuffix"` if it is not.
 
 If your value string starts with a special character (`%-.[]{},?:*&!|>\`), you need to quote it for the YAML parser.
 Unfortunately, this breaks the detection of the `${}` pattern. You have to use this syntax instead:
 ```yaml
 my_final_key: !env "{${var_name}}"
 ```
-This will resolve as `{my_value}`.
+This will resolve as `"{my_value}"`.
 
-In all those examples, if both the variable and the default value are not defined, the value is replaced by `""`
-and then cast by the yaml loader (`""` becomes `None`, `"10"` becomes `10`, and `"true"` becomes `True`).
+In all those examples, if both the variable and the default value are not defined, the value is replaced by an empty
+string, and then the field value is cast by the yaml loader (`""` becomes `None`, `"10"` becomes `10`, and `"true"`
+becomes `True`).
 
 #### Lists in environment variables
 You can store a list in your environment variable, and use this syntax to split it on commas:
 ```yaml
+# config.yml
 my_list: !list ${my_var}
 ```
 with `my_var=my_first_value,my_second_value`
@@ -130,15 +124,23 @@ This will resolve as `["my_value", "my_second_value"]`.
 If you want to expand a relative path in your YAML config file:
 
 ````yaml
+# config.yml
 my_path: !path my_folder/my_file.txt  
 ````
-This will resolve to "/path/to/config.yml/../my_folder/my_file.txt"
+Assuming your file structure looks like this:
+```
+root/
+├── config.yml
+├── my_folder
+    ├── my_file.txt
+```
 
-Do not start the relative path by `/` as it will be treated as an absolute path instead.
+The path is resolved starting from the folder containing the parent yml file, this example will resolve to
+`/root/my_folder/my_file.txt`
 
-````yaml
-my_path: !path /my_folder/my_file.txt  # This will resolve to "/my_folder/my_file.txt" 
-````
+Do not start the path with `/` as it will be treated as an absolute path instead.
+
+You can use environment variables in your file path.
 
 ### Importing other files
 
@@ -150,11 +152,22 @@ my_import: !import my_folder/my_other_config.yml
 ````
 
 ```yaml
-my_other_config.yml
+# my_other_config.yml
 - var_1
 - var_2
 ```
 
-This will resolve to `"my_import": [var_1, var_2]`
+The path is resolved starting from the folder containing the parent yml file, this example will resolve to
+`"my_import": [var_1, var_2]`
 
-Do not start the relative path by `/` as it will be treated as an absolute path instead.
+Do not start the import path with `/` as it will be treated as an absolute path instead.
+
+You can use environment variables in your import path.
+
+# Testing
+
+Install the development dependencies with `pip install -r dev.requirements.txt`.
+
+Run `python -m unitttest discover` to run the tests.
+
+Run `pylint illuin_config` to check the files linting.

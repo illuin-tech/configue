@@ -1,13 +1,12 @@
 import json
 import warnings
-from logging.config import ConvertingDict
-from typing import Dict
+from typing import Any, Dict
 
 from illuin_config.yaml_loader import YamlLoader
 from .config_loader import ConfigLoader
 
 
-def load_config_from_dict(config_dict: Dict) -> ConvertingDict:
+def load_config_from_dict(config_dict: Dict) -> Any:
     """Load configuration from a dictionary.
 
     :param config_dict: the dictionary to parse
@@ -17,7 +16,7 @@ def load_config_from_dict(config_dict: Dict) -> ConvertingDict:
     return ConfigLoader(config_dict).config
 
 
-def load_config_from_yaml_file(file_path: str) -> ConvertingDict:
+def load_config_from_yaml_file(file_path: str) -> Any:
     """Load configuration from a YAML file.
 
     :param file_path: Absolute path to the YAML file containing the configuration
@@ -29,7 +28,7 @@ def load_config_from_yaml_file(file_path: str) -> ConvertingDict:
     return load_config_from_dict(config_dict)
 
 
-def load_config_from_json_file(file_path: str) -> ConvertingDict:
+def load_config_from_json_file(file_path: str) -> Any:
     """(Deprecated) Load configuration from a JSON file.
 
     :param file_path: Absolute path to the JSON file containing the configuration
@@ -43,7 +42,7 @@ def load_config_from_json_file(file_path: str) -> ConvertingDict:
     return load_config_from_dict(config_dict)
 
 
-def load_config_from_file(file_path: str) -> ConvertingDict:
+def load_config_from_file(file_path: str) -> Any:
     """Load configuration from a YAML or a JSON (deprecated) file.
 
     The file must have a '.json' or a '.yml' extension.
