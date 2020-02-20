@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-from illuin_config.yaml_loader import YamlLoader
+from configue.yaml_loader import YamlLoader
 
 
 class TestYamlLoader(unittest.TestCase):

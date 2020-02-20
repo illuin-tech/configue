@@ -2,7 +2,7 @@ import json
 import warnings
 from typing import Any, Dict
 
-from illuin_config.yaml_loader import YamlLoader
+from configue.yaml_loader import YamlLoader
 from .config_loader import ConfigLoader
 
 

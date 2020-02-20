@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from illuin_config import load_config_from_dict, load_config_from_file, load_config_from_json_file, \
+from configue import load_config_from_dict, load_config_from_file, load_config_from_json_file, \
     load_config_from_yaml_file
 from tests.external_module import MyObject
 

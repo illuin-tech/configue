@@ -1,16 +1,16 @@
-illuin-config
-=============
+Configue
+========
 
 A YAML parser with advanced functionalities to ease your application configuration.
 
 # Who is this library for ?
 This library is meant to be used in medium to large-scale applications, that have a lot of parameters to configure. 
 
-Modular applications especially can greatly benefit from using `illuin-config` to easily inject new modules.
+Modular applications especially can greatly benefit from using `configue` to easily inject new modules.
 
 # Installation
 
-Run `pip install illuin-config` to install from PyPI.
+Run `pip install configue` to install from PyPI.
 
 Run `pip install .` to install from sources.
 
@@ -20,7 +20,7 @@ Run `pip install .` to install from sources.
 This library uses [PyYAML](https://github.com/yaml/pyyaml) to parse the YAML files and return the file content.
 
 ```python
-from illuin_config import load_config_from_file
+from configue import load_config_from_file
 
 
 config = load_config_from_file("/path/to/yaml/file.yml")
@@ -38,7 +38,7 @@ my_other_argument:
 ```
 
 ```python
-from illuin_config import load_config_from_file
+from configue import load_config_from_file
 from my_project import MyAwesomeClass
 from my_project.my_module import MyOtherClass
 
@@ -170,4 +170,4 @@ Install the development dependencies with `pip install -r dev.requirements.txt`.
 
 Run `python -m unitttest discover` to run the tests.
 
-Run `pylint illuin_config` to check the files linting.
+Run `pylint configue` to check the files linting.

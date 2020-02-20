@@ -2,7 +2,7 @@ import logging
 import unittest
 from unittest.mock import patch
 
-from illuin_config import ConfigLoader
+from configue import ConfigLoader
 from tests.external_module import MyObject
 
 
