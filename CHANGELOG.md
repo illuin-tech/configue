@@ -1,5 +1,9 @@
 # Changelog
 ## Unreleased
+## 3.0.1
+- Fixed PyPI package description
+
+
 ## 3.0.0
 - Renamed into `configue`
 - Removed json loading
