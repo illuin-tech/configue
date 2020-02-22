@@ -1,5 +1,10 @@
 # Changelog
 ## Unreleased
+## 3.0.0
+- Renamed into `configue`
+- Removed json loading
+
+
 ## 2.4.2
 ### Enhancements
 - Updated dependency: `pyyaml` to `5.1`

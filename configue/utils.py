@@ -1,5 +1,3 @@
-import json
-import warnings
 from typing import Any, Dict
 
 from configue.yaml_loader import YamlLoader
@@ -16,7 +14,7 @@ def load_config_from_dict(config_dict: Dict) -> Any:
     return ConfigLoader(config_dict).config
 
 
-def load_config_from_yaml_file(file_path: str) -> Any:
+def load_config_from_file(file_path: str) -> Any:
     """Load configuration from a YAML file.
 
     :param file_path: Absolute path to the YAML file containing the configuration
@@ -26,30 +24,3 @@ def load_config_from_yaml_file(file_path: str) -> Any:
     config_dict = YamlLoader(file_path).load()
 
     return load_config_from_dict(config_dict)
-
-
-def load_config_from_json_file(file_path: str) -> Any:
-    """(Deprecated) Load configuration from a JSON file.
-
-    :param file_path: Absolute path to the JSON file containing the configuration
-    :return: the converting dict corresponding to the file.
-    """
-    warnings.warn("Loading configuration from a JSON file is deprecated, use a YAML file instead", DeprecationWarning)
-
-    with open(file_path, "r", encoding="utf-8") as config_file:
-        config_dict = json.load(config_file)
-
-    return load_config_from_dict(config_dict)
-
-
-def load_config_from_file(file_path: str) -> Any:
-    """Load configuration from a YAML or a JSON (deprecated) file.
-
-    The file must have a '.json' or a '.yml' extension.
-
-    :param file_path: Absolute path to the file containing the configuration
-    :return: the converting dict corresponding to the file.
-    """
-    if file_path.endswith(".json"):
-        return load_config_from_json_file(file_path)
-    return load_config_from_yaml_file(file_path)
