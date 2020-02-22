@@ -95,7 +95,7 @@ You can insert this syntax in the middle of a string:
 # config.yml
 my_key: prefix${var_name-default}suffix
 ```
-This will resolve as `"prefixmy_value_suffix"` if the value is set, `"prefixdefault_valuesuffix"` if it is not.
+This will resolve as `"prefixmy_value_suffix"` if the value is set, `"prefixdefaultsuffix"` if it is not.
 
 If your value string starts with a special character (`%-.[]{},?:*&!|>\`), you need to quote it for the YAML parser.
 Unfortunately, this breaks the detection of the `${}` pattern. You have to use this syntax instead:

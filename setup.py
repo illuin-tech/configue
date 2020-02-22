@@ -1,4 +1,9 @@
+import os
+
 import setuptools
+
+with open(os.path.join(os.path.dirname(__file__), "README.md"), "r") as readme:
+    long_description = readme.read()
 
 setuptools.setup(
     name="configue",
@@ -8,7 +13,9 @@ setuptools.setup(
     author="Illuin Technology",
     author_email="contact@illuin.tech",
 
-    description="Helpers to load config files, based on logging.config",
+    description="Helpers to load your application configuration from YAML files",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 
     zip_safe=False,
     platforms="any",
