@@ -22,7 +22,7 @@ class ConvertingMapping(MutableMapping, ConvertingMixin):
     __hash__ = dict.__hash__
 
     def __getattr__(self, item: Any) -> Any:
-        """Access methods from dict such as get(), pop(), update(), keys(), items()..."""
+        """Access methods from ConvertingDict such as update(), keys(), convert()..."""
 
         return getattr(self._dict, item)
 

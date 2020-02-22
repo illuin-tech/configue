@@ -2,7 +2,7 @@ import logging
 from logging.config import BaseConfigurator, ConvertingDict, ConvertingList, ConvertingTuple
 from typing import Any, Dict, Tuple, Optional
 
-from illuin_config.converting_mapping import ConvertingMapping
+from configue.converting_mapping import ConvertingMapping
 
 
 class ConfigLoader(BaseConfigurator):

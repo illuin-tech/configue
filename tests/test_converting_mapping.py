@@ -2,8 +2,8 @@ import unittest
 from logging.config import ConvertingDict
 from unittest.mock import create_autospec
 
-from illuin_config import ConfigLoader
-from illuin_config.converting_mapping import ConvertingMapping
+from configue import ConfigLoader
+from configue.converting_mapping import ConvertingMapping
 
 
 class TestConvertingMapping(unittest.TestCase):

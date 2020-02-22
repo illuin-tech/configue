@@ -1,9 +1,9 @@
 import setuptools
 
 setuptools.setup(
-    name="illuin_config",
+    name="configue",
     version="DEV",
-    url="https://gitlab.illuin.tech/bot-factory/illuin-config/",
+    url="https://github.com/illuin-tech/configue/",
 
     author="Illuin Technology",
     author_email="contact@illuin.tech",
@@ -17,10 +17,10 @@ setuptools.setup(
         "pyyaml>=5.1.0,<6.0.0",
     ],
     python_requires=">=3.6,<4.0",
-    packages=setuptools.find_packages(include=["illuin_config", "illuin_config.*"]),
+    packages=setuptools.find_packages(include=["configue", "configue.*"]),
 
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
