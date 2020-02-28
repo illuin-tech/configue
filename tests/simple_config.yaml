@@ -1,1 +1,3 @@
-""
+"()": "tests.external_module.MyObject"
+"my_key": "my_value"
+"my_other_key": 1

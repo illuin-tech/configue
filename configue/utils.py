@@ -21,6 +21,5 @@ def load_config_from_file(file_path: str) -> Any:
     :return: the converting dict corresponding to the file.
     """
 
-    config_dict = YamlLoader(file_path).load()
-
-    return load_config_from_dict(config_dict)
+    config = YamlLoader(file_path).load()
+    return load_config_from_dict({"key": config})["key"]
