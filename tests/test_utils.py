@@ -37,3 +37,10 @@ class TestUtils(unittest.TestCase):
         self.assertEqual("my_value", config.my_key)
         self.assertIsInstance(config.my_other_key, MyObject)
         self.assertEqual("my_sub_value", config.my_other_key.my_key)
+
+    def test_load_top_level_callable(self):
+        config = load_config_from_file(os.path.join(os.path.dirname(__file__), "simple_config.yaml"))
+
+        self.assertIsInstance(config, MyObject)
+        self.assertEqual("my_value", config.my_key)
+        self.assertEqual(1, config.my_other_key)

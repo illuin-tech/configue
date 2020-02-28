@@ -1,10 +1,17 @@
 # Changelog
 ## Unreleased
+## 3.0.2
+### Fixes
+- Fixed top-level object loading
+
+
 ## 3.0.1
+### Fixes
 - Fixed PyPI package description
 
 
 ## 3.0.0
+### Breaking changes
 - Renamed into `configue`
 - Removed json loading
 
