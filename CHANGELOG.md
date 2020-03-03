@@ -1,5 +1,10 @@
 # Changelog
 ## Unreleased
+## 3.0.3
+### Fixes
+- Fixed key errors when loading `cfg://` paths from file
+
+
 ## 3.0.2
 ### Fixes
 - Fixed top-level object loading

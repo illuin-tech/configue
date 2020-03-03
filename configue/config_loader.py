@@ -19,9 +19,10 @@ class ConfigLoader(BaseConfigurator):
     def __init__(self, config_dict: Dict) -> None:
         self._config: Optional[ConvertingDict] = None
         BaseConfigurator.__init__(self, config_dict)
+        self.config = self.convert(self.config)
 
     @property
-    def config(self) -> ConvertingDict:
+    def config(self) -> Any:
         return self._config
 
     @config.setter

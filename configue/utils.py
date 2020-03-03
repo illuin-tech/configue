@@ -22,4 +22,4 @@ def load_config_from_file(file_path: str) -> Any:
     """
 
     config = YamlLoader(file_path).load()
-    return load_config_from_dict({"key": config})["key"]
+    return load_config_from_dict(config)
