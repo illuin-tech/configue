@@ -3,10 +3,16 @@ import unittest
 from unittest.mock import patch
 
 from configue import ConfigLoader
-from tests.external_module import MyObject
+from tests.external_module import MyObject, MyObjectMock
 
 
 class TestConfigLoader(unittest.TestCase):
+    def setUp(self) -> None:
+        MyObjectMock.reset_mock()
+
+    def tearDown(self) -> None:
+        MyObjectMock.reset_mock()
+
     def test_load_simple_dict(self):
         config_dict = {
             "my_key": "my_value",
@@ -250,3 +256,20 @@ class TestConfigLoader(unittest.TestCase):
 
         mock_error.assert_called_with("Could not instantiate unknown_class: ValueError(\"Cannot resolve "
                                       "'unknown_class': No module named 'unknown_class'\",)")
+
+    def test_lazy_loading(self):
+        config_dict = {
+            "my_object": {
+                "()": "tests.external_module.MyObjectMock",
+                "my_key": "my_value",
+                "my_other_key": 1,
+            }
+        }
+
+        config_loader = ConfigLoader(config_dict)
+        config_object = config_loader.config
+
+        MyObjectMock.assert_not_called()
+        my_object = config_object["my_object"]
+        MyObjectMock.assert_called_once_with(my_key="my_value", my_other_key=1)
+        self.assertIs(my_object, MyObjectMock.return_value)

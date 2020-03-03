@@ -3,4 +3,6 @@ my_object:
   my_key: my_value
   my_other_key:
     (): tests.external_module.MyObject
-    my_key: my_sub_value
+    my_key: cfg://my_key
+
+my_key: my_sub_value
