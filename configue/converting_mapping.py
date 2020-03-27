@@ -1,4 +1,4 @@
-from collections import MutableMapping
+from collections.abc import MutableMapping
 from logging.config import ConvertingDict, ConvertingMixin
 from typing import Any, ItemsView, Iterator, Optional, ValuesView
 

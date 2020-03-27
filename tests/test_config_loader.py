@@ -1,6 +1,6 @@
 import logging
 import unittest
-from unittest.mock import patch
+from unittest.mock import ANY, patch
 
 from configue import ConfigLoader
 from tests.external_module import MyObject, MyObjectMock
@@ -254,8 +254,8 @@ class TestConfigLoader(unittest.TestCase):
         with self.assertRaises(ValueError):
             _ = config_loader.config["my_object"]
 
-        mock_error.assert_called_with("Could not instantiate unknown_class: ValueError(\"Cannot resolve "
-                                      "'unknown_class': No module named 'unknown_class'\",)")
+        mock_error.assert_called_with(ANY)
+        self.assertTrue(mock_error.call_args[0][0].startswith("Could not instantiate unknown_class: ValueError"))
 
     def test_lazy_loading(self):
         config_dict = {
