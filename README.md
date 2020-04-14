@@ -14,6 +14,9 @@ Run `pip install configue` to install from PyPI.
 
 Run `pip install .` to install from sources.
 
+This project follows the (Semantic Versioning Specification)[https://semver.org/].
+All breaking changes are described in the [Changelog](CHANGELOG.md). 
+
 # Usage
 
 ### Basic usage
