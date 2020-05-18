@@ -1,6 +1,9 @@
 Configue
 ========
 
+![CI](https://github.com/illuin-tech/configue/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/illuin-tech/configue/branch/master/graph/badge.svg)](https://codecov.io/gh/illuin-tech/configue)
+
 A YAML parser with advanced functionalities to ease your application configuration.
 
 # Who is this library for ?
