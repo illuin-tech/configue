@@ -1,5 +1,13 @@
 # Changelog
 ## Unreleased
+## 3.0.4
+### Enhancements
+- Added Python 3.9 support
+
+### Fixes
+- Fixed DeprecationWarning on collections import
+
+
 ## 3.0.3
 ### Fixes
 - Fixed key errors when loading `cfg://` paths from file
