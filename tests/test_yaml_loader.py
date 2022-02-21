@@ -40,15 +40,17 @@ class TestYamlLoader(unittest.TestCase):
         self.assertFalse(my_object_keys["test_env8"])
         self.assertEqual("pre my_value and 10 post", my_object_keys["test_env9"])
         mock_warning.assert_called_once_with(
-            "Missing environment var: 'my_unknown_var_without_default', no default is set")
+            "Missing environment var: 'my_unknown_var_without_default', no default is set"
+        )
 
     def test_load_import_from_yaml_file(self):
         my_object_keys = self.yaml_loader.load()
 
         self.assertEqual(["my_str_value", "my_value"], my_object_keys["test_import_1"])
         self.assertEqual(["my_str_value", "my_value"], my_object_keys["test_import_2"])
-        self.assertEqual(os.path.join(os.path.dirname(__file__), "sub_folder/my_file.txt"),
-                         my_object_keys["test_import_3"])
+        self.assertEqual(
+            os.path.join(os.path.dirname(__file__), "sub_folder/my_file.txt"), my_object_keys["test_import_3"]
+        )
         self.assertEqual(os.path.join(os.path.dirname(__file__), "my_file.txt"), my_object_keys["test_import_4"])
 
     def test_load_list_from_yaml_file(self):

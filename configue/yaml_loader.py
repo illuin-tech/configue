@@ -40,8 +40,8 @@ class YamlLoader:
             end_pos = match.end(5)
         replaced_str += raw_value[end_pos:]
         # Put back quotes
-        if node.style == "\"":
-            replaced_str = f"\"{replaced_str}\""
+        if node.style == '"':
+            replaced_str = f'"{replaced_str}"'
         # reload node to cast the value
         return self._get_reloaded_value(replaced_str)
 

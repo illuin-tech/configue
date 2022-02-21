@@ -2,11 +2,9 @@
 -e .
 
 # Linting
-pylint>=2.4.2,<2.5.0
-pylint-quotes==0.2.1
-
-# Publish
-twine>=2.0.0,<3.0.0
+black==22.1.0
+pylint==2.12.2
 
 # Coverage
-pytest-cov>=2.5.0,<3.0.0
+pytest==7.0.1
+pytest-cov==3.0.0

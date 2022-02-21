@@ -7,5 +7,4 @@ class MyObject:
         self.my_other_key = my_other_key
 
 
-# pylint: disable=invalid-name
 MyObjectMock = create_autospec(MyObject, spec_set=True)
