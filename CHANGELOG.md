@@ -1,5 +1,11 @@
 # Changelog
 ## Unreleased
+## 3.0.5
+### Enhancements
+- Added Python 3.10 support
+- Updated PyYAML dependency version
+
+
 ## 3.0.4
 ### Enhancements
 - Added Python 3.9 support

@@ -3,7 +3,6 @@ from logging.config import ConvertingDict, ConvertingMixin
 from typing import Any, ItemsView, Iterator, Optional, ValuesView
 
 
-# pylint: disable=too-many-ancestors
 class ConvertingMapping(MutableMapping, ConvertingMixin):
     """Similar to ConvertingDict without inheriting from dict, to allow **kwargs unpacking override.
 

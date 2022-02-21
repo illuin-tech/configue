@@ -17,27 +17,32 @@ class TestConfigLoader(unittest.TestCase):
         config_dict = {
             "my_key": "my_value",
             "my_other_key": 1,
-            "my_complex_key": {
-                "my_sub_key": "my_sub_value"
-            },
-            "my_list": ["my_first_value", {
-                "my_sub_list_key": "my_sub_list_value",
-            }],
+            "my_complex_key": {"my_sub_key": "my_sub_value"},
+            "my_list": [
+                "my_first_value",
+                {
+                    "my_sub_list_key": "my_sub_list_value",
+                },
+            ],
         }
 
         config_loader = ConfigLoader(config_dict)
         config = config_loader.config
 
-        self.assertEqual({
-            "my_key": "my_value",
-            "my_other_key": 1,
-            "my_complex_key": {
-                "my_sub_key": "my_sub_value"
+        self.assertEqual(
+            {
+                "my_key": "my_value",
+                "my_other_key": 1,
+                "my_complex_key": {"my_sub_key": "my_sub_value"},
+                "my_list": [
+                    "my_first_value",
+                    {
+                        "my_sub_list_key": "my_sub_list_value",
+                    },
+                ],
             },
-            "my_list": ["my_first_value", {
-                "my_sub_list_key": "my_sub_list_value",
-            }],
-        }, config)
+            config,
+        )
 
     def test_load_callable_dict(self):
         config_dict = {
@@ -76,9 +81,7 @@ class TestConfigLoader(unittest.TestCase):
         self.assertEqual("my_sub_value", config_object.my_other_key.my_key)
 
     def test_external_variable_loading(self):
-        config_dict = {
-            "my_key": "ext://logging.INFO"
-        }
+        config_dict = {"my_key": "ext://logging.INFO"}
 
         config_loader = ConfigLoader(config_dict)
 
@@ -94,7 +97,7 @@ class TestConfigLoader(unittest.TestCase):
                     "my_key": "my_sub_value",
                 },
             },
-            "my_other_object": "cfg://my_object"
+            "my_other_object": "cfg://my_object",
         }
 
         config_loader = ConfigLoader(config_dict)
@@ -107,13 +110,16 @@ class TestConfigLoader(unittest.TestCase):
 
     def test_list_loading(self):
         config_dict = {
-            "my_objects": [{
-                "()": "tests.external_module.MyObject",
-                "my_key": "my_value",
-            }, {
-                "()": "tests.external_module.MyObject",
-                "my_key": "my_other_value",
-            }]
+            "my_objects": [
+                {
+                    "()": "tests.external_module.MyObject",
+                    "my_key": "my_value",
+                },
+                {
+                    "()": "tests.external_module.MyObject",
+                    "my_key": "my_other_value",
+                },
+            ]
         }
 
         config_loader = ConfigLoader(config_dict)
@@ -132,10 +138,11 @@ class TestConfigLoader(unittest.TestCase):
                 {
                     "()": "tests.external_module.MyObject",
                     "my_key": "my_value",
-                }, {
+                },
+                {
                     "()": "tests.external_module.MyObject",
                     "my_key": "my_other_value",
-                }
+                },
             )
         }
 
@@ -188,9 +195,7 @@ class TestConfigLoader(unittest.TestCase):
 
     def test_cfg_convert_get_index(self):
         config_dict = {
-            "my_list": [
-                "my_value"
-            ],
+            "my_list": ["my_value"],
             "my_key": "cfg://my_list[0]",
         }
 
