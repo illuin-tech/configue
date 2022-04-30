@@ -1,0 +1,10 @@
+key1:
+  value1: !import test_file_1.yml
+  value2: !import test_file_1.yml
+  value3: !import ${ENV_VAR}.yml
+  value4: !import:key1.subkey1 test_file_1.yml
+
+invalid_class:
+  (): tests.external_module.CONSTANT
+
+const: !ext tests.external_module.CONSTANT

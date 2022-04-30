@@ -26,10 +26,31 @@ All breaking changes are described in the [Changelog](CHANGELOG.md).
 This library uses [PyYAML](https://github.com/yaml/pyyaml) to parse the YAML files and return the file content.
 
 ```python
-from configue import load_config_from_file
+import configue
 
 
-config = load_config_from_file("/path/to/yaml/file.yml")
+config = configue.load("/path/to/yaml/file.yml")
+```
+
+
+### Loading a sub path
+If you are not interested in loading the whole file, you can only load a subpath:
+```yaml
+# config.yml
+some_key:
+  some_list:
+    - first_item
+    - second_item:
+        item_key: item_value
+
+not_loaded_key: not_loaded_value
+```
+
+```python
+import configue
+
+config = configue.load("config.yml", "some_key.some_list.1.item_key")
+assert config == "item_value"
 ```
 
 ### Instantiating classes
@@ -44,28 +65,26 @@ my_other_argument:
 ```
 
 ```python
-from configue import load_config_from_file
+import configue
 from my_project import MyAwesomeClass
 from my_project.my_module import MyOtherClass
 
 
-my_instance = load_config_from_file("config.yml")
+my_instance = configue.load("config.yml")
 assert isinstance(my_instance, MyAwesomeClass)
 assert my_instance.my_argument == "my_value"
 assert isinstance(my_instance.my_other_argument, MyOtherClass)
 ```
 
-Note that the instance is lazy-loaded if it is contained in a list or a dictionary, it is only created when the element
-is called.
 
 ### Loading external variables
 
 ```yaml
 # config.yml
-my_argument: ext://my_project.my_module.my_variable
+my_argument: !ext my_project.my_module.my_variable
 ```
 
-When a value starts with `ext://`, the value will be imported from the corresponding python module.
+When using the `!ext` tag, the value will be imported from the corresponding python module.
 
 
 ### Loading internal variables
@@ -75,54 +94,40 @@ When a value starts with `ext://`, the value will be imported from the correspon
 my_object:
     my_instance:
         (): my_project.MyClass
-my_instance_shortcut: cfg://my_object.my_instance
+my_instance_shortcut: !cfg my_object.my_instance
 ```
 
-When a value starts with `cfg://`, the value will be loaded from the same configuration file (useful for a DRY
-configuration).
+When using the `!cfg` tag, the value will be loaded from the same configuration file (useful for a DRY configuration).
 
 ### Environment variables
 
 If you want to load an environment variable in your YAML config file, you can use this syntax:
 ```yaml
 # config.yml
-my_key: ${var_name}
+my_key: ${VAR_NAME}
 ```
-This will resolve as `"my_value"` if the environment variable `var_name` is set to this value.
+This will resolve as `"my_value"` if the environment variable `VAR_NAME` is set to this value.
 
 If you need a default value in case the environment variable is not set:
 ```yaml
 # config.yml
-my_key: ${var_name-default}
+my_key: ${VAR_NAME-default}
 ```
 
 You can insert this syntax in the middle of a string:
 ```yaml
 # config.yml
-my_key: prefix${var_name-default}suffix
+my_key: prefix${VAR_NAME-default}suffix
 ```
 This will resolve as `"prefixmy_value_suffix"` if the value is set, `"prefixdefaultsuffix"` if it is not.
 
-If your value string starts with a special character (`%-.[]{},?:*&!|>\`), you need to quote it for the YAML parser.
-Unfortunately, this breaks the detection of the `${}` pattern. You have to use this syntax instead:
-```yaml
-my_final_key: !env "{${var_name}}"
-```
-This will resolve as `"{my_value}"`.
-
-In all those examples, if both the variable and the default value are not defined, the value is replaced by an empty
-string, and then the field value is cast by the yaml loader (`""` becomes `None`, `"10"` becomes `10`, and `"true"`
-becomes `True`).
-
-#### Lists in environment variables
-You can store a list in your environment variable, and use this syntax to split it on commas:
+If your environment variable resolves to a yaml value, it will be cast (unless you are using quotes):
 ```yaml
 # config.yml
-my_list: !list ${my_var}
+my_key: ${VAR_NAME}
+my_quoted_key: "${VAR_NAME}"
 ```
-with `my_var=my_first_value,my_second_value`
-
-This will resolve as `["my_value", "my_second_value"]`.
+This will resolve as `True` if the value is set to `true`, `yes` or `y`, `None` if the value is set to `~` or `null`.
 
 
 ### Relative paths
@@ -159,12 +164,15 @@ my_import: !import my_folder/my_other_config.yml
 
 ```yaml
 # my_other_config.yml
-- var_1
-- var_2
+some_key:
+    - var_1
+    - var_2
 ```
 
-The path is resolved starting from the folder containing the parent yml file, this example will resolve to
-`"my_import": [var_1, var_2]`
+By default, the path is resolved starting from the folder containing the parent yml file, this example will resolve to
+`"my_import": {"some_key": [var_1, var_2]}`
+
+If you want to import only a section of the file, use the path in the tag suffix `!import:some_key.0`
 
 Do not start the import path with `/` as it will be treated as an absolute path instead.
 
