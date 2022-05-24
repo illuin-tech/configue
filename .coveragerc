@@ -1,0 +1,14 @@
+[run]
+branch = True
+include =
+    configue/*
+
+[report]
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+    pragma: nocover
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    def __repr__

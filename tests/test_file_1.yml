@@ -1,0 +1,33 @@
+key1:
+  subkey1:
+    other_key: other_value
+  subkey2:
+    (): tests.external_module.MyObject
+    my_key: some_value
+  subkey3:
+    - item1
+    - item2
+  subkey4: !cfg key2
+  sub.key.5: final_value
+
+key2:
+  subkey5: !cfg key1.subkey1
+  subkey6: !cfg key1.subkey1
+  subkey7: !cfg key1.subkey2
+  subkey8: !cfg key1.subkey2
+  subkey9: !cfg key1.subkey3
+  subkey10: !cfg key1.subkey3
+
+env:
+  env_key1: ${ENV_VAR}
+  env_key2: ${ENV_VAR-}
+  env_key3: "${ENV_VAR-}"
+  env_key4: ${ENV_VAR-~}
+  env_key5: ${ENV_VAR-default-value}
+  env_key6: ${ENV_VAR-123}
+  env_key7: "${ENV_VAR-123}"
+  env_key8: pre${ENV_VAR}post
+  env_key9: |
+    ${ENV_VAR}
+  env_key10: >
+    ${ENV_VAR}

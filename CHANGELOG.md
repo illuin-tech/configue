@@ -1,5 +1,39 @@
 # Changelog
 ## Unreleased
+## 4.0.0
+### Breaking changes
+- The `!env` tag has been removed, environment variables can now be loaded anywhere
+- The `cfg://` syntax has been replaced with `!cfg path.to.value`
+- `!cfg` now redirects to a path in the current file (instead of the first loaded file)
+  - Use `!import` to load a path in another file
+- The `ext://module.submodule.object` syntax has been replaced with `!ext module.submodule.object`
+- Replaced `load_config_from_file` with a `configue.load` function, which is now the main entrypoint of the library
+  - use `configue.load("/path/to/file.yml")` to load a file
+  - use `configue.load("/path/to/file.yml", "path.to.section")` to load only a section of a file
+  - loading a path in a file recursively loads all children (replaced the lazy-loading with path loading),
+  see README for more details
+- Removed the `load_config_from_dict` function
+- The `!list` tag has been removed, set your environment variable to `[value_1, value_2]` instead
+
+### Migration guide
+- Remove all `!env` tags
+- Remove all `!list` tags, and replace your environment variables from `value1,value2` to `[value1,value2]`
+- Replace `ext://path.to.load` with `!ext path.to.load`
+- If you are using `!import` to import a file containing values with `cfg://path.to.load`, replace the `cfg://...` with
+`!import:path/to/root/file.yml path.to.load`
+- Replace `cfg://path.to.load` with `!cfg path.to.load`
+- Replace `configue.load_config_from_file(...)` with `configue.load(...)`
+- Replace `configue.load_config_from_file(...)["path"]["to"]["load"]` with `configue.load(..., "path.to.load")`
+
+### Features
+- The `!import` tag can now specify the path to load in the other file, with the syntax:
+`!import:path.to.load path/to/file.yml`
+- Dictionaries and lists are now JSON dumpable and picklable
+
+### Fixes
+- Removed warning about missing environment variables from unloaded paths
+
+
 ## 3.0.5
 ### Enhancements
 - Added Python 3.10 support
