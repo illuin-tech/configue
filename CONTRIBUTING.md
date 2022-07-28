@@ -21,6 +21,7 @@ Run `python -m unitttest discover` to run the tests.
 
 Run these commands to check the files linting:
 ```shell script
-pylint --load-plugins pylint_quotes configue
-pylint --load-plugins pylint_quotes tests --disable=protected-access,too-many-instance-attributes,no-self-use
+black . --check -l 120
+pylint configue
+pylint tests --disable=too-many-instance-attributes,no-self-use,similarities
 ```
