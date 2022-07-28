@@ -116,6 +116,12 @@ class TestConfigue(TestCase):
         result = configue.load(self._get_path("test_file_2.yml"), "const")
         self.assertEqual(CONSTANT, result)
 
+    def test_null_path(self):
+        result = configue.load(self._get_path("test_file_2.yml"), "paths")
+        self.assertIsNone(result["path"])
+        self.assertEqual(os.path.expanduser("~"), result["path2"])
+        self.assertIsNone(result["path3"])
+
     @staticmethod
     def _get_path(file_name: str) -> str:
         return os.path.join(os.path.dirname(__file__), file_name)

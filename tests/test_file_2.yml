@@ -8,3 +8,7 @@ invalid_class:
   (): tests.external_module.CONSTANT
 
 const: !ext tests.external_module.CONSTANT
+paths:
+  path: !path ${ENV_PATH-null}
+  path2: !path "${ENV_PATH-~}"
+  path3: !path ${ENV_PATH-~}

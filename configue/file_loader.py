@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any, List, TYPE_CHECKING, Type, Union, cast
+from typing import Any, List, Optional, TYPE_CHECKING, Type, Union, cast
 
 from yaml import Loader, MappingNode, Node, ScalarNode, SequenceNode
 
@@ -71,8 +71,11 @@ class FileLoader:
         path = self._load_path(loader, node)
         return self._root_loader.load_file(path, tag_suffix[1:])
 
-    def _load_path(self, loader: ConfigueLoader, node: ScalarNode) -> str:
-        path = os.path.expanduser(loader.construct_scalar(node))
+    def _load_path(self, loader: ConfigueLoader, node: ScalarNode) -> Optional[str]:
+        raw_path = loader.construct_scalar(node)
+        if raw_path is None:
+            return None
+        path = os.path.expanduser(raw_path)
         return os.path.join(os.path.dirname(self._file_path), path)
 
     def _load_cfg(self, loader: ConfigueLoader, node: ScalarNode) -> Any:

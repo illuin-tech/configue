@@ -1,5 +1,9 @@
 # Changelog
 ## Unreleased
+## 4.0.1
+### Fixes
+- Loading a null `!path` will now return `None` instead of raising an Exception
+
 ## 4.0.0
 ### Breaking changes
 - The `!env` tag has been removed, environment variables can now be loaded anywhere
