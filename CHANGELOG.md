@@ -1,5 +1,10 @@
 # Changelog
 ## Unreleased
+## 4.1.0
+### Features
+- Added a `logging_config_path` keyword parameter to `configue.load` to set up a logging configuration while loading a
+configuration file
+
 ## 4.0.1
 ### Fixes
 - Loading a null `!path` will now return `None` instead of raising an Exception

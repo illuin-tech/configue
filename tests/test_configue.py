@@ -1,3 +1,4 @@
+import logging
 import os
 from unittest import TestCase
 
@@ -121,6 +122,12 @@ class TestConfigue(TestCase):
         self.assertIsNone(result["path"])
         self.assertEqual(os.path.expanduser("~"), result["path2"])
         self.assertIsNone(result["path3"])
+
+    def test_logging_config(self):
+        configue.load(self._get_path("test_file_2.yml"), "const", logging_config_path="logging_config")
+        logger = logging.getLogger("test.path")
+        self.assertEqual(logging.DEBUG, logger.handlers[0].level)
+        self.assertEqual(logging.ERROR, logger.handlers[1].level)
 
     @staticmethod
     def _get_path(file_name: str) -> str:
