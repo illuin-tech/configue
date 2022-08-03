@@ -1,5 +1,6 @@
 import logging
-from typing import Any, Dict, List, Union
+import logging.config
+from typing import Any, Dict, List, Optional, Union
 
 from .file_loader import FileLoader
 
@@ -11,8 +12,15 @@ class RootLoader:
         self._root_file = file_path
         self._file_loaders_by_file: Dict[str, FileLoader] = {}
 
-    def load_root_file(self, sub_path: Union[str, List[str]]) -> Any:
+    def load_root_file(self, sub_path: Union[str, List[str]], logging_config_path: Optional[str]) -> Any:
+        if logging_config_path is not None:
+            self._load_logging_config(logging_config_path)
         return self.load_file(self._root_file, sub_path)
+
+    def _load_logging_config(self, logging_config_path: str) -> None:
+        logging.captureWarnings(True)
+        logging_config = self.load_file(self._root_file, logging_config_path)
+        logging.config.dictConfig(logging_config)
 
     def load_file(self, file_path: str, sub_path: Union[str, List[str]]) -> Any:
         if file_path not in self._file_loaders_by_file:

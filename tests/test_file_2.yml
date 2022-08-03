@@ -12,3 +12,20 @@ paths:
   path: !path ${ENV_PATH-null}
   path2: !path "${ENV_PATH-~}"
   path3: !path ${ENV_PATH-~}
+
+logging_config:
+  version: 1
+  disable_existing_loggers: false
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+    custom:
+      \(): tests.external_module.CustomHandler
+      arg: value
+      level: ERROR
+  loggers:
+    test.path:
+      handlers:
+        - console
+        - custom

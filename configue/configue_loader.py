@@ -11,6 +11,7 @@ from configue.exceptions import NonCallableError
 
 ENV_PATTERN_REGEX = re.compile(r"(?:(?!\${[^-}]+}).)*(\${)([^-}]+)(-?)([^}]*)(})")
 CONSTRUCTOR_KEY = "()"
+ESCAPED_CONSTRUCTOR_KEY = "\\()"
 
 
 # pylint: disable=too-many-ancestors
@@ -27,6 +28,8 @@ class ConfigueLoader(yaml.FullLoader):
                     f"expected a callable but found {type(cls)}"
                 )
             return cls(**mapping)
+        if isinstance(mapping, dict) and ESCAPED_CONSTRUCTOR_KEY in mapping:
+            mapping[CONSTRUCTOR_KEY] = mapping.pop(ESCAPED_CONSTRUCTOR_KEY)
         return mapping
 
     def construct_scalar(self, node: yaml.ScalarNode) -> Any:

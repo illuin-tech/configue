@@ -142,8 +142,8 @@ Assuming your file structure looks like this:
 ```
 root/
 ├── config.yml
-├── my_folder
-    ├── my_file.txt
+└── my_folder
+    └── my_file.txt
 ```
 
 The path is resolved starting from the folder containing the parent yml file, this example will resolve to
@@ -177,6 +177,50 @@ If you want to import only a section of the file, use the path in the tag suffix
 Do not start the import path with `/` as it will be treated as an absolute path instead.
 
 You can use environment variables in your import path.
+
+### Logging configuration
+
+You can load the logging configuration for your application by using the `logging_config_path` parameter:
+```yaml
+# config.yml
+logging_config:
+  version: 1
+  handlers:
+    console:
+      class : logging.StreamHandler
+      stream  : ext://sys.stdout
+    custom_handler:
+      \(): my_app.CustomHandler
+      some_param: some_value
+      level: ERROR
+  root:
+    level: INFO
+    handlers:
+      - console
+
+app_config:
+  some_key: some_value
+
+not_loaded_key: not_loaded_value
+```
+
+```python
+import logging
+
+import configue
+
+app_config = configue.load("config.yml", "app_config", logging_config_path="logging_config")
+assert app_config == {"some_key": "some_value"}
+
+logger = logging.getLogger(__name__)
+logger.info("Hello world!")  # Uses the console handler
+```
+
+The logging configuration should follow the format of `logging.config.dictConfig`
+(check [the documentation](https://docs.python.org/3/library/logging.config.html#logging-config-dictschema) for more
+details).
+Make sure to escape the constructors with `\()` instead of `()` for handlers, formatters and filters.
+
 
 # Testing
 
