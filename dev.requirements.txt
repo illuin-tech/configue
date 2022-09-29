@@ -7,7 +7,7 @@ pylint==2.13.7
 
 # Coverage
 pytest==7.0.1
-pytest-cov==3.0.0
+pytest-cov==4.0.0
 
 # Publish
 setuptools==59.6.0
