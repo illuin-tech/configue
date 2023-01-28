@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any, List, Optional, TYPE_CHECKING, Type, Union, cast
+from typing import TYPE_CHECKING, Any, List, Optional, Type, Union, cast
 
 from yaml import Loader, MappingNode, Node, ScalarNode, SequenceNode
 
@@ -45,8 +45,7 @@ class FileLoader:
             current_node = self._get_node_at_sub_path(sub_path, current_node)
         return self._loader.construct_object(current_node, deep=True)
 
-    @staticmethod
-    def _get_node_at_sub_path(sub_path: str, current_node: Node) -> Node:
+    def _get_node_at_sub_path(self, sub_path: str, current_node: Node) -> Node:
         if isinstance(current_node, SequenceNode):
             try:
                 sub_path = int(sub_path)
@@ -65,6 +64,16 @@ class FileLoader:
                 if isinstance(node_key, ScalarNode) and str(node_key.value) == sub_path:
                     return node_value
             raise SubPathNotFound(f"Could not find sub_path {sub_path} {current_node.start_mark}")
+        elif isinstance(current_node, ScalarNode):
+            if current_node.tag == "!import":
+                path = os.path.join(os.path.dirname(self._file_path), current_node.value)
+                if not os.path.exists(path):
+                    raise SubPathNotFound(f"Could not find sub_path element {sub_path} {current_node.start_mark}")
+                with open(path, encoding="utf-8") as config_file:
+                    loader = self._loader.__class__(config_file)
+                    root_node = loader.get_single_node()
+                loader.dispose()
+                return self._get_node_at_sub_path(sub_path, root_node)
         raise SubPathNotFound(f"Could not find sub_path element {sub_path} {current_node.start_mark}")
 
     def _load_import(self, loader: ConfigueLoader, tag_suffix: str, node: ScalarNode) -> Any:
@@ -80,7 +89,7 @@ class FileLoader:
 
     def _load_cfg(self, loader: ConfigueLoader, node: ScalarNode) -> Any:
         path = loader.construct_scalar(node)
-        return self.load(path)
+        return self._root_loader.load_file(node.start_mark.name, path)
 
     @staticmethod
     def _load_ext(loader: ConfigueLoader, node: ScalarNode) -> Any:

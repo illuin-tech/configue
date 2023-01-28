@@ -129,6 +129,10 @@ class TestConfigue(TestCase):
         self.assertEqual(logging.DEBUG, logger.handlers[0].level)
         self.assertEqual(logging.ERROR, logger.handlers[1].level)
 
+    def test_load_internal_value_from_other_file(self):
+        result = configue.load(self._get_path("test_file_3.yml"))
+        self.assertEqual(result["key"], "value")
+
     @staticmethod
     def _get_path(file_name: str) -> str:
         return os.path.join(os.path.dirname(__file__), file_name)

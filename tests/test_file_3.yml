@@ -1,0 +1,3 @@
+shared: !import test_external.yml
+
+key: !cfg shared.key
