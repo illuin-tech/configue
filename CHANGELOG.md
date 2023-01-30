@@ -1,5 +1,9 @@
 # Changelog
 ## Unreleased
+## 4.1.1
+### Fixes
+- Fixed loading `!import` or `!cfg` tags in a `!cfg` tag
+
 ## 4.1.0
 ### Features
 - Added a `logging_config_path` keyword parameter to `configue.load` to set up a logging configuration while loading a
