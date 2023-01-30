@@ -12,3 +12,7 @@ class NonCallableError(ConfigueError):
 
 class ConfigueRecursionError(ConfigueError):
     pass
+
+
+class InvalidNodeType(Exception):
+    pass

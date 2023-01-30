@@ -8,6 +8,9 @@ from tests.external_module import CONSTANT, MyObject
 
 
 class TestConfigue(TestCase):
+    def tearDown(self) -> None:
+        os.environ.pop("ENV_VAR", None)
+
     def test_load_file_shares_object_instances(self):
         result = configue.load(self._get_path("test_file_1.yml"), "key1")
         self.assertIs(result["subkey1"], result["subkey4"]["subkey5"])
@@ -128,6 +131,12 @@ class TestConfigue(TestCase):
         logger = logging.getLogger("test.path")
         self.assertEqual(logging.DEBUG, logger.handlers[0].level)
         self.assertEqual(logging.ERROR, logger.handlers[1].level)
+
+    def test_load_internal_value_from_other_file(self):
+        os.environ["ENV_VAR"] = "test_file_1"
+        result = configue.load(self._get_path("test_file_2.yml"), "key1")
+        self.assertEqual("other_value", result["value5"])
+        self.assertEqual("other_value", result["value6"])
 
     @staticmethod
     def _get_path(file_name: str) -> str:

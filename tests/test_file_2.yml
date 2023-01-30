@@ -3,6 +3,8 @@ key1:
   value2: !import test_file_1.yml
   value3: !import ${ENV_VAR}.yml
   value4: !import:key1.subkey1 test_file_1.yml
+  value5: !cfg key1.value4.other_key
+  value6: !cfg key1.value2.key1.subkey4.subkey5.other_key
 
 invalid_class:
   (): tests.external_module.CONSTANT
