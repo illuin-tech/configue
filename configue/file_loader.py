@@ -3,9 +3,10 @@ import os
 from typing import Any, List, Optional, TYPE_CHECKING, Type, Union, cast
 
 from yaml import Loader, MappingNode, Node, ScalarNode, SequenceNode
+from yaml.constructor import ConstructorError
 
 from .configue_loader import ConfigueLoader
-from .exceptions import SubPathNotFound, InvalidNodeType
+from .exceptions import SubPathNotFound, InvalidNodeType, NotFoundError
 
 if TYPE_CHECKING:
     from .root_loader import RootLoader
@@ -107,7 +108,19 @@ class FileLoader:
         path = loader.construct_scalar(node)
         return self.load(path)
 
-    @staticmethod
-    def _load_ext(loader: ConfigueLoader, node: ScalarNode) -> Any:
+    def _load_ext(self, loader: ConfigueLoader, node: ScalarNode) -> Any:
         path = loader.construct_scalar(node)
-        return loader.find_python_name(path, node.start_mark, unsafe=True)
+        object_path_elements = path.split(".")
+        remaining_path_elements = []
+        while object_path_elements:
+            try:
+                loaded_object = loader.find_python_name(".".join(object_path_elements), node.start_mark, unsafe=True)
+                break
+            except ConstructorError:
+                remaining_path_elements.insert(0, object_path_elements.pop(-1))
+        else:
+            raise NotFoundError(f"Could not load element {path} {node.start_mark}")
+        remaining_path = ".".join(remaining_path_elements)
+        if remaining_path:
+            return self._get_element_at_sub_path(remaining_path, loaded_object)
+        return loaded_object

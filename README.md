@@ -82,6 +82,7 @@ assert isinstance(my_instance.my_other_argument, MyOtherClass)
 ```yaml
 # config.yml
 my_argument: !ext my_project.my_module.my_variable
+my_argument: !ext my_project.my_module.my_instance.my_attribute
 ```
 
 When using the `!ext` tag, the value will be imported from the corresponding python module.
@@ -95,6 +96,7 @@ my_object:
     my_instance:
         (): my_project.MyClass
 my_instance_shortcut: !cfg my_object.my_instance
+my_attribute_shortcut: !cfg my_object.my_instance.my_attribute
 ```
 
 When using the `!cfg` tag, the value will be loaded from the same configuration file (useful for a DRY configuration).

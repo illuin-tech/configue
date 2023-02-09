@@ -14,5 +14,9 @@ class ConfigueRecursionError(ConfigueError):
     pass
 
 
+class NotFoundError(ConfigueError):
+    pass
+
+
 class InvalidNodeType(Exception):
     pass

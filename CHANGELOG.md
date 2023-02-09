@@ -1,5 +1,9 @@
 # Changelog
 ## Unreleased
+## 4.2.0
+### Features
+- `!ext` can now load object attributes, such as enum members (e.g. `!ext module.MyEnum.MY_VALUE`)
+
 ## 4.1.1
 ### Fixes
 - Fixed loading `!import` or `!cfg` tags in a `!cfg` tag

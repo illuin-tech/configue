@@ -3,8 +3,8 @@ import os
 from unittest import TestCase
 
 import configue
-from configue.exceptions import NonCallableError, SubPathNotFound
-from tests.external_module import CONSTANT, MyObject
+from configue.exceptions import NonCallableError, SubPathNotFound, NotFoundError
+from tests.external_module import CONSTANT, MyObject, Color
 
 
 class TestConfigue(TestCase):
@@ -137,6 +137,26 @@ class TestConfigue(TestCase):
         result = configue.load(self._get_path("test_file_2.yml"), "key1")
         self.assertEqual("other_value", result["value5"])
         self.assertEqual("other_value", result["value6"])
+
+    def test_ext_enum_loading(self):
+        result = configue.load(self._get_path("test_file_2.yml"), "enum_loading")
+        self.assertEqual(Color.RED, result)
+
+    def test_ext_raises_exception_on_module_not_found(self):
+        with self.assertRaises(NotFoundError):
+            configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_module")
+
+    def test_ext_raises_exception_on_submodule_not_found(self):
+        with self.assertRaises(NotFoundError):
+            configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_sub_module")
+
+    def test_ext_raises_exception_on_element_not_found(self):
+        with self.assertRaises(NotFoundError):
+            configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_element")
+
+    def test_ext_raises_exception_on_property_not_found(self):
+        with self.assertRaises(NotFoundError):
+            configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_property")
 
     @staticmethod
     def _get_path(file_name: str) -> str:
