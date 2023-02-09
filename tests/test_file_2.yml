@@ -31,3 +31,10 @@ logging_config:
       handlers:
         - console
         - custom
+
+enum_loading: !ext tests.external_module.Color.RED
+invalid_ext:
+  wrong_module: !ext invalid.test.Color.RED
+  wrong_sub_module: !ext tests.invalid.Color.RED
+  wrong_element: !ext tests.invalid.Invalid.RED
+  wrong_property: !ext tests.invalid.Color.GREEN

@@ -1,3 +1,4 @@
+from enum import Enum
 from logging import Handler, LogRecord
 
 
@@ -17,3 +18,8 @@ class CustomHandler(Handler):
 
 
 CONSTANT = "constant"
+
+
+class Color(Enum):
+    RED = "red"
+    BLUE = "blue"
