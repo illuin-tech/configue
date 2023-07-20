@@ -5,6 +5,7 @@ key1:
   value4: !import:key1.subkey1 test_file_1.yml
   value5: !cfg key1.value4.other_key
   value6: !cfg key1.value2.key1.subkey4.subkey5.other_key
+  value7: !import ${ENV_PATH-null}
 
 invalid_class:
   (): tests.external_module.CONSTANT
