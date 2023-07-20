@@ -1,9 +1,9 @@
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 from .root_loader import RootLoader
 
 
-def load(file_path: str, sub_path: Union[str, List[str]] = "", *, logging_config_path: str = None) -> Any:
+def load(file_path: str, sub_path: Union[str, List[str]] = "", *, logging_config_path: Optional[str] = None) -> Any:
     """Load configuration from a YAML file.
 
     :param file_path: Absolute path to the YAML file containing the configuration

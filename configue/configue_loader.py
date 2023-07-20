@@ -1,7 +1,7 @@
 import logging
 import os
 import re
-from typing import Any, Mapping
+from typing import Any, Callable, Hashable, Mapping, cast
 
 import yaml
 
@@ -9,7 +9,7 @@ import yaml
 # or "${myvar}" -> "${", "myvar", "", "", "}"
 from configue.exceptions import NonCallableError
 
-ENV_PATTERN_REGEX = re.compile(r"(?:(?!\${[^-}]+}).)*(\${)([^-}]+)(-?)([^}]*)(})")
+ENV_PATTERN_REGEX = re.compile(r"(\${)(\w+)(-?)((?:(?![^}]*\${)[^}])*)(})")
 CONSTRUCTOR_KEY = "()"
 ESCAPED_CONSTRUCTOR_KEY = "\\()"
 
@@ -18,10 +18,14 @@ ESCAPED_CONSTRUCTOR_KEY = "\\()"
 class ConfigueLoader(yaml.FullLoader):
     logger = logging.getLogger(__name__)
 
-    def construct_yaml_map(self, node: yaml.MappingNode) -> Mapping:
-        mapping = self.construct_mapping(node)
+    def construct_yaml_map(self, node: yaml.MappingNode) -> Mapping[Hashable, Any]:
+        mapping: Mapping[Hashable, Any] = self.construct_mapping(node)
         if isinstance(mapping, dict) and CONSTRUCTOR_KEY in mapping:
-            cls = self.find_python_name(mapping.pop(CONSTRUCTOR_KEY), node.start_mark, unsafe=True)
+            cls: Callable[..., Mapping[Hashable, Any]] = self.find_python_name(  # type: ignore[no-untyped-call]
+                mapping.pop(CONSTRUCTOR_KEY),
+                node.start_mark,
+                unsafe=True,
+            )
             if not callable(cls):
                 raise NonCallableError(
                     f"Error while constructing a Python instance {node.start_mark}, "
@@ -33,7 +37,7 @@ class ConfigueLoader(yaml.FullLoader):
         return mapping
 
     def construct_scalar(self, node: yaml.ScalarNode) -> Any:
-        scalar = yaml.FullLoader.construct_scalar(self, node)
+        scalar = cast(str, yaml.FullLoader.construct_scalar(self, node))
         replaced_value = ""
         end_pos = 0
         for match in ENV_PATTERN_REGEX.finditer(scalar):

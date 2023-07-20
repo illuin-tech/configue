@@ -82,6 +82,24 @@ class TestConfigue(TestCase):
             },
             result,
         )
+        os.environ["ENV_VAR"] = "${ENV_VAR_2}-${ENV_VAR_2}"
+        os.environ["ENV_VAR_2"] = "123"
+        result = configue.load(self._get_path("test_file_1.yml"), "env")
+        self.assertEqual(
+            {
+                "env_key1": "123-123",
+                "env_key2": "123-123",
+                "env_key3": "123-123",
+                "env_key4": "123-123",
+                "env_key5": "123-123",
+                "env_key6": "123-123",
+                "env_key7": "123-123",
+                "env_key8": "pre123-123post",
+                "env_key9": "123-123",
+                "env_key10": "123-123",
+            },
+            result,
+        )
 
     def test_load_with_imports(self):
         os.environ["ENV_VAR"] = "test_file_1"
@@ -90,6 +108,7 @@ class TestConfigue(TestCase):
         self.assertIs(result["value1"], result["value3"])
         self.assertEqual("other_value", result["value1"]["key1"]["subkey1"]["other_key"])
         self.assertEqual("other_value", result["value4"]["other_key"])
+        self.assertIsNone(result["value7"])
 
     def test_load_without_path(self):
         result = configue.load(self._get_path("test_file_1.yml"))
@@ -157,6 +176,10 @@ class TestConfigue(TestCase):
     def test_ext_raises_exception_on_property_not_found(self):
         with self.assertRaises(NotFoundError):
             configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_property")
+
+    def test_loading_empty_file(self):
+        content = configue.load(self._get_path("test_file_3.yml"))
+        self.assertIsNone(content)
 
     @staticmethod
     def _get_path(file_name: str) -> str:
