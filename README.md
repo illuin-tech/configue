@@ -76,6 +76,22 @@ assert my_instance.my_argument == "my_value"
 assert isinstance(my_instance.my_other_argument, MyOtherClass)
 ```
 
+This syntax also works to call functions:
+```yaml
+# config.yml
+(): "my_project.my_function"
+my_argument: "world"
+```
+
+```python
+import configue
+
+def my_function(my_argument: str) -> str:
+  return "Hello " + my_argument
+
+my_value = configue.load("config.yml")
+assert my_value == "Hello world"
+```
 
 ### Loading external variables
 
