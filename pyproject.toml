@@ -30,7 +30,7 @@ dependencies = [
 dev = [
     "black==23.9.1",
     "mypy==1.5.1",
-    "pylint==2.17.6",
+    "pylint==2.17.7",
     "pytest==7.4.2",
     "pytest-cov==4.1.0",
     "setuptools==68.2.2",
