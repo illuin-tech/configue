@@ -23,3 +23,9 @@ CONSTANT = "constant"
 class Color(Enum):
     RED = "red"
     BLUE = "blue"
+
+
+class Static:
+    @staticmethod
+    def get_static_value():
+        return "foo"

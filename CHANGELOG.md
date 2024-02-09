@@ -1,5 +1,11 @@
 # Changelog
-## Unreleased
+## 5.0.0
+### Breaking changes
+- Remove support for Python < 3.8
+
+### Features
+- `()` can now load object attributes, such as static methods (e.g. `(): module.MyClass.generate`)
+
 ## 4.2.0
 ### Features
 - `!ext` can now load object attributes, such as enum members (e.g. `!ext module.MyEnum.MY_VALUE`)
