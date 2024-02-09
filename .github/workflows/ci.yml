@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11']
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
 
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11']
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
 
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
       - name: Lint with pylint
         run: |
           pylint configue
-          pylint tests --disable=too-many-instance-attributes,no-self-use,similarities
+          pylint tests --disable=too-many-instance-attributes,no-self-use,similarities,too-many-public-methods
 
   deploy:
     needs: [test, lint]

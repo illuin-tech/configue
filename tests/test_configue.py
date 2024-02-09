@@ -161,6 +161,14 @@ class TestConfigue(TestCase):
         result = configue.load(self._get_path("test_file_2.yml"), "enum_loading")
         self.assertEqual(Color.RED, result)
 
+    def test_constructor_static_method_loading(self):
+        result = configue.load(self._get_path("test_file_2.yml"), "static_loading")
+        self.assertEqual("foo", result)
+
+    def test_constructor_raises_exception_on_constructor_not_found(self):
+        with self.assertRaises(NotFoundError):
+            configue.load(self._get_path("test_file_2.yml"), "invalid_loading")
+
     def test_ext_raises_exception_on_module_not_found(self):
         with self.assertRaises(NotFoundError):
             configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_module")
