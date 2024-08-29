@@ -122,7 +122,7 @@ class FileLoader:
         remaining_path_elements: List[str] = []
         while object_path_elements:
             try:
-                loaded_object = loader.find_python_name(  # type: ignore[no-untyped-call]
+                loaded_object = loader.find_python_name(
                     ".".join(object_path_elements),
                     node.start_mark,
                     unsafe=True,

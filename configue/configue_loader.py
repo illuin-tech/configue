@@ -27,7 +27,7 @@ class ConfigueLoader(yaml.FullLoader):  # pylint: disable=too-many-ancestors
             remaining_path_elements: List[str] = []
             while object_path_elements:
                 try:
-                    cls = self.find_python_name(  # type: ignore[no-untyped-call]
+                    cls = self.find_python_name(
                         ".".join(object_path_elements),
                         node.start_mark,
                         unsafe=True,
