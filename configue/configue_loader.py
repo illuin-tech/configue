@@ -2,15 +2,15 @@ import logging
 import os
 import re
 from collections.abc import Hashable
-from typing import Any, List, Mapping, cast
+from typing import Any, List, Mapping
 
 import yaml
 from yaml.constructor import ConstructorError
 
-# Matches "${myvar-default}" -> "${", "myvar", "-", "default", "}"
-# or "${myvar}" -> "${", "myvar", "", "", "}"
 from configue.exceptions import NonCallableError, NotFoundError
 
+# Matches "${myvar-default}" -> "${", "myvar", "-", "default", "}"
+# or "${myvar}" -> "${", "myvar", "", "", "}"
 ENV_PATTERN_REGEX = re.compile(r"(\${)(\w+)(-?)((?:(?![^}]*\${)[^}])*)(})")
 CONSTRUCTOR_KEY = "()"
 ESCAPED_CONSTRUCTOR_KEY = "\\()"
@@ -51,7 +51,7 @@ class ConfigueLoader(yaml.FullLoader):  # pylint: disable=too-many-ancestors
         return mapping
 
     def construct_scalar(self, node: yaml.ScalarNode) -> Any:
-        scalar = cast(str, yaml.FullLoader.construct_scalar(self, node))
+        scalar = yaml.FullLoader.construct_scalar(self, node)
         replaced_value = ""
         end_pos = 0
         for match in ENV_PATTERN_REGEX.finditer(scalar):
