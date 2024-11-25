@@ -28,7 +28,7 @@ jobs:
           py.test --cov-report xml --cov-report term --cov=configue ./tests
       - name: Codecov
         if: matrix.python-version == '3.10'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
