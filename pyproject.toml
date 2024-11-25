@@ -28,7 +28,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "black==24.8.0",
+    "black==24.10.0",
     "build==1.2.2",
     "mypy==1.11.2",
     "pylint==3.3.1",
