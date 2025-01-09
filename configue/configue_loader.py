@@ -2,7 +2,7 @@ import logging
 import os
 import re
 from collections.abc import Hashable
-from typing import Any, List, Mapping
+from typing import Any, List, Mapping, Union
 
 import yaml
 from yaml.constructor import ConstructorError
@@ -50,8 +50,10 @@ class ConfigueLoader(yaml.FullLoader):  # pylint: disable=too-many-ancestors
             mapping[CONSTRUCTOR_KEY] = mapping.pop(ESCAPED_CONSTRUCTOR_KEY)
         return mapping
 
-    def construct_scalar(self, node: yaml.ScalarNode) -> Any:
+    def construct_scalar(self, node: Union[yaml.ScalarNode, yaml.MappingNode]) -> Any:
         scalar = yaml.FullLoader.construct_scalar(self, node)
+        if isinstance(node, yaml.MappingNode):  # pragma: nocover
+            return scalar
         replaced_value = ""
         end_pos = 0
         for match in ENV_PATTERN_REGEX.finditer(scalar):
