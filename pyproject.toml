@@ -36,7 +36,7 @@ dev = [
     "pytest-cov==6.0.0",
     "setuptools==77.0.3",
     "twine==6.1.0",
-    "wheel==0.45.1",
+    "wheel==0.46.1",
 ]
 
 [project.urls]
