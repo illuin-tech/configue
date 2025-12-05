@@ -3,7 +3,7 @@ import os
 from unittest import TestCase
 
 import configue
-from configue.exceptions import NonCallableError, SubPathNotFound, NotFoundError
+from configue.exceptions import ConfigueError, NonCallableError, SubPathNotFound, NotFoundError
 from tests.external_module import CONSTANT, MyObject, Color
 
 
@@ -178,11 +178,11 @@ class TestConfigue(TestCase):
             configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_sub_module")
 
     def test_ext_raises_exception_on_element_not_found(self):
-        with self.assertRaises(NotFoundError):
+        with self.assertRaises(ConfigueError):
             configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_element")
 
     def test_ext_raises_exception_on_property_not_found(self):
-        with self.assertRaises(NotFoundError):
+        with self.assertRaises(KeyError):
             configue.load(self._get_path("test_file_2.yml"), "invalid_ext.wrong_property")
 
     def test_loading_empty_file(self):

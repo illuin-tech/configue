@@ -120,6 +120,7 @@ class FileLoader:
         path = loader.construct_scalar(node)
         object_path_elements = path.split(".")
         remaining_path_elements: List[str] = []
+        exceptions: list[Optional[str]] = []
         while object_path_elements:
             try:
                 loaded_object = loader.find_python_name(
@@ -128,10 +129,13 @@ class FileLoader:
                     unsafe=True,
                 )
                 break
-            except ConstructorError:
+            except ConstructorError as error:
+                exceptions.append(error.problem)
                 remaining_path_elements.insert(0, object_path_elements.pop(-1))
         else:
-            raise NotFoundError(f"Could not load element {path} {node.start_mark}")
+            raise NotFoundError(
+                f"Could not load element {path} {node.start_mark}, encountered exceptions: {exceptions!r}"
+            ) from None
         remaining_path = ".".join(remaining_path_elements)
         if remaining_path:
             return self._get_element_at_sub_path(remaining_path, loaded_object)

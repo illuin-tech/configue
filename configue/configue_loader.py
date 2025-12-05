@@ -2,7 +2,7 @@ import logging
 import os
 import re
 from collections.abc import Hashable
-from typing import Any, List, Mapping, Union
+from typing import Any, List, Mapping, Optional, Union
 
 import yaml
 from yaml.constructor import ConstructorError
@@ -25,6 +25,7 @@ class ConfigueLoader(yaml.FullLoader):  # pylint: disable=too-many-ancestors
             path = mapping.pop(CONSTRUCTOR_KEY)
             object_path_elements = path.split(".")
             remaining_path_elements: List[str] = []
+            exceptions: list[Optional[str]] = []
             while object_path_elements:
                 try:
                     cls = self.find_python_name(
@@ -33,10 +34,13 @@ class ConfigueLoader(yaml.FullLoader):  # pylint: disable=too-many-ancestors
                         unsafe=True,
                     )
                     break
-                except ConstructorError:
+                except ConstructorError as error:
+                    exceptions.append(error.problem)
                     remaining_path_elements.insert(0, object_path_elements.pop(-1))
             else:
-                raise NotFoundError(f"Could not load element {path} {node.start_mark}")
+                raise NotFoundError(
+                    f"Could not load element {path} {node.start_mark}, exceptions encountered: {exceptions!r}"
+                ) from None
             for path_element in remaining_path_elements:
                 cls = getattr(cls, path_element)
 
