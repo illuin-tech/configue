@@ -1,4 +1,8 @@
 # Changelog
+## 6.0.1
+### Fixes
+- Improve error messages when loading fails
+
 ## 6.0.0
 ### Breaking changes
 - Remove support for Python 3.8

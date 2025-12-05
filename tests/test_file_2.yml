@@ -37,8 +37,8 @@ enum_loading: !ext tests.external_module.Color.RED
 invalid_ext:
   wrong_module: !ext invalid.test.Color.RED
   wrong_sub_module: !ext tests.invalid.Color.RED
-  wrong_element: !ext tests.invalid.Invalid.RED
-  wrong_property: !ext tests.invalid.Color.GREEN
+  wrong_element: !ext tests.external_module.Invalid.RED
+  wrong_property: !ext tests.external_module.Color.GREEN
 
 static_loading:
   (): tests.external_module.Static.get_static_value
