@@ -51,7 +51,7 @@ class FileLoader:
                 try:
                     current_node = self._get_node_at_sub_path(sub_path, current_node)
                 except InvalidNodeType:
-                    current_node = self._loader.construct_object(  # type: ignore[no-untyped-call]
+                    current_node = self._loader.construct_object(
                         current_node,
                         deep=True,
                     )
@@ -60,7 +60,7 @@ class FileLoader:
                 current_node = self._get_element_at_sub_path(sub_path, current_node)
         if is_current_node_loaded:
             return current_node
-        return self._loader.construct_object(current_node, deep=True)  # type: ignore[no-untyped-call]
+        return self._loader.construct_object(current_node, deep=True)
 
     @staticmethod
     def _get_node_at_sub_path(sub_path: str, current_node: Node) -> Node:
