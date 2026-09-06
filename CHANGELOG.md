@@ -1,4 +1,9 @@
 # Changelog
+## 6.0.2
+### Security fixes
+- Fix environment variables loading which could trigger arbitrary code execution when loading untrusted environment
+variables
+
 ## 6.0.1
 ### Fixes
 - Improve error messages when loading fails

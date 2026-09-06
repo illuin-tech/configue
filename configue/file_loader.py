@@ -5,7 +5,7 @@ from typing import Any, List, Optional, TYPE_CHECKING, Type, Union, cast
 from yaml import Loader, MappingNode, Node, ScalarNode, SequenceNode
 from yaml.constructor import ConstructorError
 
-from .configue_loader import ConfigueLoader
+from .configue_loader import ConfigueUnsafeLoader
 from .exceptions import SubPathNotFound, InvalidNodeType, NotFoundError
 
 if TYPE_CHECKING:
@@ -21,10 +21,10 @@ class FileLoader:
 
         loader_cls: Type[Loader] = cast(
             Type[Loader],
-            type("CustomLoader", (ConfigueLoader,), {"yaml_loader": self}),
+            type("CustomLoader", (ConfigueUnsafeLoader,), {"yaml_loader": self}),
         )
 
-        loader_cls.add_multi_constructor("!import", self._load_import)  # type: ignore[no-untyped-call]
+        loader_cls.add_multi_constructor("!import", self._load_import)
         loader_cls.add_constructor("!path", self._load_path)
         loader_cls.add_constructor("!cfg", self._load_cfg)
         loader_cls.add_constructor("!ext", self._load_ext)
@@ -33,7 +33,7 @@ class FileLoader:
         with open(self._file_path, encoding="utf-8") as config_file:
             self._loader = loader_cls(config_file)
             self._root_node = self._loader.get_single_node()
-        self._loader.dispose()  # type: ignore[no-untyped-call]
+        self._loader.dispose()
 
     def load(self, path: Union[str, List[str]]) -> Any:
         if self._root_node is None:
@@ -99,24 +99,24 @@ class FileLoader:
         except AttributeError:
             raise SubPathNotFound(f"Could not find sub_path {sub_path} in {current_element}") from None
 
-    def _load_import(self, loader: ConfigueLoader, tag_suffix: str, node: ScalarNode) -> Any:
+    def _load_import(self, loader: ConfigueUnsafeLoader, tag_suffix: str, node: ScalarNode) -> Any:
         path = self._load_path(loader, node)
         if path is None:
             return None
         return self._root_loader.load_file(path, tag_suffix[1:])
 
-    def _load_path(self, loader: ConfigueLoader, node: ScalarNode) -> Optional[str]:
+    def _load_path(self, loader: ConfigueUnsafeLoader, node: ScalarNode) -> Optional[str]:
         raw_path = loader.construct_scalar(node)
         if raw_path is None:
             return None
         path = os.path.expanduser(raw_path)
         return os.path.join(os.path.dirname(self._file_path), path)
 
-    def _load_cfg(self, loader: ConfigueLoader, node: ScalarNode) -> Any:
+    def _load_cfg(self, loader: ConfigueUnsafeLoader, node: ScalarNode) -> Any:
         path = loader.construct_scalar(node)
         return self.load(path)
 
-    def _load_ext(self, loader: ConfigueLoader, node: ScalarNode) -> Any:
+    def _load_ext(self, loader: ConfigueUnsafeLoader, node: ScalarNode) -> Any:
         path = loader.construct_scalar(node)
         object_path_elements = path.split(".")
         remaining_path_elements: List[str] = []
