@@ -28,7 +28,7 @@ class FileLoader:
         loader_cls.add_constructor("!path", self._load_path)
         loader_cls.add_constructor("!cfg", self._load_cfg)
         loader_cls.add_constructor("!ext", self._load_ext)
-        loader_cls.add_constructor("tag:yaml.org,2002:map", loader_cls.construct_yaml_map)  # type: ignore[type-var]
+        loader_cls.add_constructor("tag:yaml.org,2002:map", loader_cls.construct_yaml_map)
 
         with open(self._file_path, encoding="utf-8") as config_file:
             self._loader = loader_cls(config_file)
