@@ -38,7 +38,7 @@ def load_env_vars_in_scalar_node(node: yaml.ScalarNode, scalar: str) -> Any:
     return yaml.load(replaced_value, Loader=ConfigueSafeLoader)
 
 
-class ConfigueSafeLoader(yaml.SafeLoader):  # pylint: disable=too-many-ancestors
+class ConfigueSafeLoader(yaml.SafeLoader):  # type: ignore[misc] # pylint: disable=too-many-ancestors
     def construct_scalar(self, node: Union[yaml.ScalarNode, yaml.MappingNode]) -> Any:
         scalar = super().construct_scalar(node)
         if isinstance(node, yaml.MappingNode):  # pragma: nocover
@@ -46,7 +46,7 @@ class ConfigueSafeLoader(yaml.SafeLoader):  # pylint: disable=too-many-ancestors
         return load_env_vars_in_scalar_node(node, scalar)
 
 
-class ConfigueUnsafeLoader(yaml.FullLoader):  # pylint: disable=too-many-ancestors
+class ConfigueUnsafeLoader(yaml.FullLoader):  # type: ignore[misc] # pylint: disable=too-many-ancestors
     def construct_yaml_map(self, node: yaml.MappingNode) -> Any:
         mapping: Mapping[Hashable, Any] = self.construct_mapping(node)
         if isinstance(mapping, dict) and CONSTRUCTOR_KEY in mapping:
