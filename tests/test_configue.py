@@ -3,8 +3,8 @@ import os
 from unittest import TestCase
 
 import configue
-from configue.exceptions import ConfigueError, NonCallableError, SubPathNotFound, NotFoundError
-from tests.external_module import CONSTANT, MyObject, Color
+from configue.exceptions import ConfigueError, NonCallableError, NotFoundError, SubPathNotFound
+from tests.external_module import CONSTANT, Color, MyObject
 
 
 class TestConfigue(TestCase):
@@ -99,6 +99,27 @@ class TestConfigue(TestCase):
                 "env_key10": "123-123",
             },
             result,
+        )
+
+    def test_load_with_env_vars_does_not_instantiate_objects(self):
+        os.environ["ENV_VAR"] = '{"()": "tests.external_module.MyObject", "my_key": "my_value"}'
+        result = configue.load(self._get_path("test_file_1.yml"), "env.env_key1")
+        self.assertEqual(
+            {"()": "tests.external_module.MyObject", "my_key": "my_value"},
+            result,
+        )
+
+        os.environ["ENV_VAR"] = "{'()': 'tests.external_module.MyObject', 'my_key': 'my_value'}"
+        result3 = configue.load(self._get_path("test_file_1.yml"), "env.env_key1")
+        self.assertEqual(
+            {"()": "tests.external_module.MyObject", "my_key": "my_value"},
+            result3,
+        )
+
+        result4 = configue.load(self._get_path("test_file_1.yml"), "env.env_key3")
+        self.assertEqual(
+            "{'()': 'tests.external_module.MyObject', 'my_key': 'my_value'}",
+            result4,
         )
 
     def test_load_with_imports(self):
